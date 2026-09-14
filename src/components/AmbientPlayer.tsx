@@ -70,7 +70,7 @@ export function AmbientPlayer() {
     timerRef.current = setInterval(() => {
       const c = ctxRef.current;
       if (!c || !masterRef.current) return;
-      const note = scale[stepRef.current % scale.length] * (stepRef.current % 7 === 6 ? 0.5 : 1);
+      const note = scale[stepRef.current % scale.length]! * (stepRef.current % 7 === 6 ? 0.5 : 1);
       stepRef.current += stepRef.current % 3 === 0 ? 2 : 1;
       const t = c.currentTime;
       const osc = c.createOscillator();

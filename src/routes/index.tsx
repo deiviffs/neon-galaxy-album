@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
+import { CosmicStarfield } from "@/components/CosmicStarfield";
 import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
@@ -13,12 +14,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Álbum cósmico con fotos, videos, mensajes románticos y música. Golden Hour en piano y rotación interactiva.",
+          "Álbum cósmico con fotos, videos, mensajes románticos y música. Interstellar en piano acústico y galaxia reactiva.",
       },
       { property: "og:title", content: "Álbum Galaxia Neón" },
       {
         property: "og:description",
-        content: "Nuestros mejores recuerdos flotando en la galaxia al ritmo de Golden Hour.",
+        content: "Nuestros mejores recuerdos flotando en la galaxia al compás del piano de Interstellar.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -55,11 +56,11 @@ function Index() {
     return () => musicEngine.stop();
   }, [fetchPlates]);
 
-  // Iniciar Golden Hour al primer clic o interacción del usuario
+  // Iniciar Interstellar en piano al primer clic o interacción
   const startAudioOnFirstInteraction = useCallback(() => {
     if (!hasStartedBgMusic && !muted && !openId && !editing) {
       setHasStartedBgMusic(true);
-      void musicEngine.startBackgroundGoldenHour();
+      void musicEngine.startBackgroundInterstellar();
     }
   }, [hasStartedBgMusic, muted, openId, editing]);
 
@@ -85,7 +86,7 @@ function Index() {
 
   const open = useMemo(() => plates.find((p) => p.id === openId) ?? null, [plates, openId]);
 
-  // Reproducir audio de la tarjeta (y pausar Golden Hour)
+  // Reproducir audio de la tarjeta (y pausar Interstellar)
   const playFor = useCallback(
     (plate: Plate) => {
       if (muted) return;
@@ -105,13 +106,13 @@ function Index() {
     [muted],
   );
 
-  // Cerrar tarjeta (y reanudar Golden Hour en piano)
+  // Cerrar tarjeta (y reanudar Interstellar en piano)
   const close = useCallback(() => {
     setOpenId(null);
     setIsPlayingCardAudio(false);
     musicEngine.stopCardAudio();
     if (!muted) {
-      void musicEngine.startBackgroundGoldenHour();
+      void musicEngine.startBackgroundInterstellar();
     }
   }, [muted]);
 
@@ -245,7 +246,7 @@ function Index() {
       if (open) {
         playFor(open);
       } else {
-        musicEngine.startBackgroundGoldenHour();
+        musicEngine.startBackgroundInterstellar();
       }
     } else {
       setMuted(true);
@@ -259,8 +260,8 @@ function Index() {
       onClick={startAudioOnFirstInteraction}
       className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden"
     >
-      {/* Fondo de estrellas animadas */}
-      <div className="pointer-events-none absolute inset-0 starfield opacity-80" aria-hidden />
+      {/* Fondo de galaxia y estrellas reactivas a cada tecla del piano de Interstellar */}
+      <CosmicStarfield active={!muted} />
 
       {/* Barra superior */}
       <header className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10">
@@ -273,8 +274,8 @@ function Index() {
             <div className="flex items-center gap-2">
               <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita</p>
               {!muted && !open && (
-                <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[0.65rem] text-primary font-medium">
-                  <Music className="h-2.5 w-2.5 animate-bounce" /> Golden Hour (Piano)
+                <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] text-primary font-medium shadow-sm">
+                  <Music className="h-2.5 w-2.5 animate-bounce" /> Interstellar (Solo Piano) 🎹
                 </span>
               )}
             </div>
@@ -591,7 +592,7 @@ function Index() {
             musicEngine.stopCardAudio();
             setEditing(null);
             if (!muted) {
-              void musicEngine.startBackgroundGoldenHour();
+              void musicEngine.startBackgroundInterstellar();
             }
           }}
         />

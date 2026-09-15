@@ -1,16 +1,42 @@
-import cosmos1 from "@/assets/cosmos-1.jpg";
-import cosmos2 from "@/assets/cosmos-2.jpg";
-import cosmos3 from "@/assets/cosmos-3.jpg";
-import cosmos4 from "@/assets/cosmos-4.jpg";
+import mem01 from "@/assets/memories/memory-01.jpeg";
+import mem02 from "@/assets/memories/memory-02.jpeg";
+import mem03 from "@/assets/memories/memory-03.jpeg";
+import mem04 from "@/assets/memories/memory-04.jpeg";
+import mem05 from "@/assets/memories/memory-05.jpeg";
+import mem06 from "@/assets/memories/memory-06.jpeg";
+import mem07 from "@/assets/memories/memory-07.jpeg";
+import mem08 from "@/assets/memories/memory-08.jpeg";
+import mem09 from "@/assets/memories/memory-09.jpeg";
+import mem10 from "@/assets/memories/memory-10.jpeg";
+import mem11 from "@/assets/memories/memory-11.jpeg";
+import mem12 from "@/assets/memories/memory-12.jpeg";
+import mem13 from "@/assets/memories/memory-13.jpeg";
+import mem14 from "@/assets/memories/memory-14.jpeg";
+import mem15 from "@/assets/memories/memory-15.jpeg";
+import mem16 from "@/assets/memories/memory-16.jpeg";
+import mem17 from "@/assets/memories/memory-17.jpeg";
+import mem18 from "@/assets/memories/memory-18.jpeg";
+import mem19 from "@/assets/memories/memory-19.jpeg";
+import mem20 from "@/assets/memories/memory-20.jpeg";
+import mem21 from "@/assets/memories/memory-21.jpeg";
+import mem22 from "@/assets/memories/memory-22.jpeg";
+import mem23 from "@/assets/memories/memory-23.mp4";
+import mem24 from "@/assets/memories/memory-24.mp4";
+import mem25 from "@/assets/memories/memory-25.mp4";
+import mem26 from "@/assets/memories/memory-26.mp4";
+import mem27 from "@/assets/memories/memory-27.mp4";
+import mem28 from "@/assets/memories/memory-28.mp4";
+import mem29 from "@/assets/memories/memory-29.mp4";
 
 export type Plate = {
   id: string;
   title: string;
   tag: string;
   message: string;
-  /** URL de la imagen incluida por defecto (si no hay archivo subido) */
+  /** URL del recurso (imagen o video) */
   imageUrl: string | null;
   imageBlob: Blob | null;
+  isVideo?: boolean;
   /** Melodía generada */
   melody: string;
   /** Audio subido por la usuaria (tiene prioridad sobre la melodía) */
@@ -19,17 +45,15 @@ export type Plate = {
   order: number;
 };
 
-const cosmosImages = [cosmos1, cosmos2, cosmos3, cosmos4];
-const melodies = ["orbita", "venus", "latido", "deriva", "cristal", "nocturno"];
-
 export const DEFAULT_PLATES: Plate[] = [
   {
     id: "p1",
     title: "La Casualidad de Messenger",
     tag: "01 • El Comienzo",
-    message: "Recuerdo perfectamente cómo empezamos: aquella confusión tuya por Messenger, por pura casualidad, fue el inicio de algo maravilloso ✨",
-    imageUrl: cosmos1,
+    message: "Recuerdo perfectamente cómo empezamos: aquella confusión por Messenger, por pura casualidad, fue el inicio de algo maravilloso ✨",
+    imageUrl: mem01,
     imageBlob: null,
+    isVideo: false,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -40,8 +64,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "El Primer Destello",
     tag: "02 • Chispa",
     message: "Al principio yo no buscaba nada, pero tu forma de ser, tus risas y tus charlas me hicieron cambiar de parecer por completo 💫",
-    imageUrl: cosmos2,
+    imageUrl: mem02,
     imageBlob: null,
+    isVideo: false,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -52,8 +77,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Nuestras Bromas en Casa",
     tag: "03 • Risas",
     message: "Aquellas tardes compartiendo tiempo, las risas interminables y las bromas que solo nosotros entendíamos 🌹",
-    imageUrl: cosmos3,
+    imageUrl: mem03,
     imageBlob: null,
+    isVideo: false,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -63,9 +89,10 @@ export const DEFAULT_PLATES: Plate[] = [
     id: "p4",
     title: "Dejar de Verla como Amiga",
     tag: "04 • Sentimiento",
-    message: "Llegó un momento en el que ya no te miraba solo como una amiga: empecé a quererte y a sentir algo verdaderamente único en el corazón 💖",
-    imageUrl: cosmos4,
+    message: "Llegó un momento en el que ya no te miraba solo como una amiga: empecé a quererte y a sentir algo único 💖",
+    imageUrl: mem04,
     imageBlob: null,
+    isVideo: false,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -76,8 +103,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Creer en lo Imposible",
     tag: "05 • Ilusión",
     message: "Una vez me preguntaste si te quería... Y siempre sigo aquí, porque contigo elegí creer en lo imposible y en la magia de quererte ✨",
-    imageUrl: cosmos1,
+    imageUrl: mem05,
     imageBlob: null,
+    isVideo: false,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -88,8 +116,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Forjar Nuestro Destino",
     tag: "06 • Constelación",
     message: "No creo en sentarme a esperar el destino; prefiero construirlo a tu lado con hechos, paciencia y cariño sincero 🪐",
-    imageUrl: cosmos2,
+    imageUrl: mem06,
     imageBlob: null,
+    isVideo: false,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -100,8 +129,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Demostrar con Hechos",
     tag: "07 • Sinceridad",
     message: "Elegí estar a tu lado demostrándote que lo mío era en serio, honesto y nacido desde lo más puro del corazón 💫",
-    imageUrl: cosmos3,
+    imageUrl: mem07,
     imageBlob: null,
+    isVideo: false,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -112,8 +142,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Querer Sin Fecha de Caducidad",
     tag: "08 • Eterno",
     message: "Es mentira que voy a dejar de quererte: eso no se borra ni hoy, ni mañana, ni con el paso del tiempo 🌌",
-    imageUrl: cosmos4,
+    imageUrl: mem08,
     imageBlob: null,
+    isVideo: false,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -124,8 +155,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "La Música de Nuestra Historia",
     tag: "09 • Melodía",
     message: "Cada acorde me recuerda a ti y a nuestras anécdotas compartidas en esta sincronía cósmica tan bonita 🎵✨",
-    imageUrl: cosmos1,
+    imageUrl: mem09,
     imageBlob: null,
+    isVideo: false,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -136,8 +168,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Tú de 19 y Yo de 23",
     tag: "10 • Casualidad",
     message: "Esa coincidencia de momentos y ocurrencias que nos hizo reír tantas veces: casualidades que se vuelven magia 💫",
-    imageUrl: cosmos2,
+    imageUrl: mem10,
     imageBlob: null,
+    isVideo: false,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -148,8 +181,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Apoyarte Siempre",
     tag: "11 • Incondicional",
     message: "Estaré allí para ti siempre que me necesites, para escucharte, cuidarte y celebrar cada uno de tus logros 🌹",
-    imageUrl: cosmos3,
+    imageUrl: mem11,
     imageBlob: null,
+    isVideo: false,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -160,8 +194,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "La Historia Aún Sigue",
     tag: "12 • Continuidad",
     message: "Esto no es un punto final; las personas que dejan una huella bonita siempre tienen un lugar especial en la vida ✨",
-    imageUrl: cosmos4,
+    imageUrl: mem12,
     imageBlob: null,
+    isVideo: false,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -172,8 +207,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Para Nathalia Josefina",
     tag: "13 • Especial",
     message: "Para mi niña consentida: que este y todos tus días estén llenos de la misma luz y alegría que tú transmites 🧸✨",
-    imageUrl: cosmos1,
+    imageUrl: mem13,
     imageBlob: null,
+    isVideo: false,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -184,8 +220,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Llegaste Sin Avisar",
     tag: "14 • Destello",
     message: "La vida tiene sus propias formas de llegar sin pedir permiso, y encontrarte en el camino fue un regalo hermoso 🌟",
-    imageUrl: cosmos2,
+    imageUrl: mem14,
     imageBlob: null,
+    isVideo: false,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -196,8 +233,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Magia en el Aire",
     tag: "15 • Mágico",
     message: "Valía la pena cada aliento, cada suspiro y cada sonrisa que se me escapaba al hablar contigo 💖",
-    imageUrl: cosmos3,
+    imageUrl: mem15,
     imageBlob: null,
+    isVideo: false,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -208,8 +246,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Una Huella Imborrable",
     tag: "16 • Luz",
     message: "Llegaste cuando menos lo esperaba y me hiciste creer de nuevo en lo bonito y sincero de querer a alguien 💫",
-    imageUrl: cosmos4,
+    imageUrl: mem16,
     imageBlob: null,
+    isVideo: false,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -220,8 +259,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Soñar a Tu Lado",
     tag: "17 • Ilusión",
     message: "Imaginar momentos felices y compartir charlas sinceras a tu lado me llenó el corazón de alegría 🪐",
-    imageUrl: cosmos1,
+    imageUrl: mem17,
     imageBlob: null,
+    isVideo: false,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -232,8 +272,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Amor con el Alma",
     tag: "18 • Entrega",
     message: "Lo más puro que tenía para dar te lo entregué con total transparencia, cariño y respeto 🌹",
-    imageUrl: cosmos2,
+    imageUrl: mem18,
     imageBlob: null,
+    isVideo: false,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -244,8 +285,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Tranquilidad Única",
     tag: "19 • Paz",
     message: "Contigo aprendí lo que significa tener paz y disfrutar de las conversaciones más simples pero significativas ✨",
-    imageUrl: cosmos3,
+    imageUrl: mem19,
     imageBlob: null,
+    isVideo: false,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -256,8 +298,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Tus Ocurrencias Divertidas",
     tag: "20 • Alegría",
     message: "Tus salidas inesperadas, tus gestos divertidos y esa forma de ser que te hace totalmente única e irrepetible 🧸",
-    imageUrl: cosmos4,
+    imageUrl: mem20,
     imageBlob: null,
+    isVideo: false,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -268,8 +311,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Sonrisas Compartidas",
     tag: "21 • Destellos",
     message: "Si tuviera que elegir mis momentos favoritos, en todos ellos estás tú sonriendo y contagiando tu vibra 💖",
-    imageUrl: cosmos1,
+    imageUrl: mem21,
     imageBlob: null,
+    isVideo: false,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -280,8 +324,9 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Cuidar lo Valioso",
     tag: "22 • Valor",
     message: "Los sentimientos sinceros son como estrellas: brillan en la oscuridad y se cuidan con el alma 🌟",
-    imageUrl: cosmos2,
+    imageUrl: mem22,
     imageBlob: null,
+    isVideo: false,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -289,11 +334,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p23",
-    title: "Deseos de Corazón",
-    tag: "23 • Buenos Deseos",
-    message: "Deseo de todo corazón que cumplas cada una de tus metas, que te rodees de gente buena y que nunca dejes de sonreír ✨",
-    imageUrl: cosmos3,
+    title: "Nuestros Videos y Risas",
+    tag: "23 • Video Recuerdo 🎬",
+    message: "Cada video guarda la chispa viva de tus ocurrencias, tus sonrisas y esos instantes que no cambio por nada 🎥✨",
+    imageUrl: mem23,
     imageBlob: null,
+    isVideo: true,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -301,11 +347,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p24",
-    title: "La Nostalgia Bonita",
-    tag: "24 • Gratitud",
-    message: "Recordar con cariño lo vivido es el mejor regalo de haber querido con toda el alma y sin reservas 💫",
-    imageUrl: cosmos4,
+    title: "Momentos en Movimiento",
+    tag: "24 • Video Recuerdo 🎬",
+    message: "Verte en movimiento y escuchar tus risas es recordar por qué cada momento valió completamente la pena 💫",
+    imageUrl: mem24,
     imageBlob: null,
+    isVideo: true,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -313,11 +360,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p25",
-    title: "Puerta Siempre Abierta",
-    tag: "25 • Siempre Ahí",
-    message: "Si algún día necesitas hablar o simplemente que alguien te escuche, aquí estaré siempre para ti 🌹",
-    imageUrl: cosmos1,
+    title: "La Magia de Verte Reír",
+    tag: "25 • Video Recuerdo 🎬",
+    message: "Tu risa ilumina más que cualquier galaxia entera; un recuerdo guardado para siempre en el corazón 🌹🎥",
+    imageUrl: mem25,
     imageBlob: null,
+    isVideo: true,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -325,11 +373,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p26",
-    title: "Luz en la Galaxia",
-    tag: "26 • Nebulosa",
-    message: "Mil millones de estrellas en el cielo y ninguna se compara con el brillo que tienes cuando eres feliz 🌌",
-    imageUrl: cosmos2,
+    title: "Instantes Cósmicos",
+    tag: "26 • Video Recuerdo 🎬",
+    message: "Pequeños clips de momentos espontáneos que se convirtieron en recuerdos inolvidables 🪐✨",
+    imageUrl: mem26,
     imageBlob: null,
+    isVideo: true,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -337,11 +386,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p27",
-    title: "Universo Compartido",
-    tag: "27 • Órbita",
-    message: "No hace falta un planeta entero: cuando hay cariño y complicidad, cualquier lugar se siente como hogar 🪐",
-    imageUrl: cosmos3,
+    title: "Nuestra Sintonía",
+    tag: "27 • Video Recuerdo 🎬",
+    message: "Compartir estos instantes contigo me hizo inmensamente feliz. La vida es más bonita con tu presencia 💖",
+    imageUrl: mem27,
     imageBlob: null,
+    isVideo: true,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -349,11 +399,12 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p28",
-    title: "Caminar Sin Prisa",
-    tag: "28 • Sendero",
-    message: "Caminar bajo las luces de neón, disfrutando de cada canción y de los recuerdos que nos hicieron sonreír 🎵💖",
-    imageUrl: cosmos4,
+    title: "Ocurrencias en Cámara",
+    tag: "28 • Video Recuerdo 🎬",
+    message: "Tus gestos únicos, tu energía bonita y cada travesura que quedó grabada para siempre 🧸🎥",
+    imageUrl: mem28,
     imageBlob: null,
+    isVideo: true,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -362,10 +413,11 @@ export const DEFAULT_PLATES: Plate[] = [
   {
     id: "p29",
     title: "Un Abrazo Cósmico",
-    tag: "29 • Abrazo",
-    message: "A través del tiempo y del espacio, los recuerdos bonitos siempre reconfortan el corazón 🧸✨",
-    imageUrl: cosmos1,
+    tag: "29 • Video Recuerdo 🎬",
+    message: "A través del tiempo y del espacio, estos videos siempre me sacan la sonrisa más sincera ✨🎬",
+    imageUrl: mem29,
     imageBlob: null,
+    isVideo: true,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -376,16 +428,17 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Siempre con Cariño",
     tag: "30 • Deivis",
     message: "De mi universo para el tuyo: gracias por haber formado parte de mi vida y dejar una huella tan linda. Att: Deivis 💖",
-    imageUrl: cosmos2,
+    imageUrl: mem01,
     imageBlob: null,
+    isVideo: false,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
     order: 29,
-  },
+  }
 ];
 
-const DB_NAME = "album-galaxia-v5";
+const DB_NAME = "album-galaxia-v6";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -420,6 +473,7 @@ export async function loadPlates(): Promise<Plate[]> {
       indexedDB.deleteDatabase("album-galaxia-v2");
       indexedDB.deleteDatabase("album-galaxia-v3");
       indexedDB.deleteDatabase("album-galaxia-v4");
+      indexedDB.deleteDatabase("album-galaxia-v5");
     } catch {}
 
     const db = await openDb();
@@ -430,7 +484,7 @@ export async function loadPlates(): Promise<Plate[]> {
       req.onerror = () => reject(req.error);
     });
 
-    if (!rows.length || rows.length < 30) {
+    if (!rows.length || rows.length < 25) {
       await Promise.all(DEFAULT_PLATES.map(savePlate));
       return [...DEFAULT_PLATES];
     }
@@ -469,4 +523,11 @@ export const plateImageSrc = (plate: Plate, urlCache: Map<string, string>): stri
     return url;
   }
   return plate.imageUrl ?? "";
+};
+
+export const isMediaVideo = (plate: Plate, src: string): boolean => {
+  if (plate.isVideo) return true;
+  if (plate.imageBlob?.type?.startsWith('video/')) return true;
+  if (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.mov')) return true;
+  return false;
 };

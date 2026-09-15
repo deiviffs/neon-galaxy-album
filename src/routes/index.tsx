@@ -1,24 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
-import { deletePlate, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
+import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Álbum Galaxia Neón ✨ Imágenes, mensajes y música" },
+      { title: "Álbum Galaxia Neón ✨ Recuerdos Cósmicos" },
       {
         name: "description",
         content:
-          "Álbum cósmico editable: cada imagen guarda su mensaje romántico y su propia música. Flotación cósmica y desplazamiento interactivo.",
+          "Álbum cósmico con fotos, videos, mensajes románticos y música. Flotación cósmica y rotación interactiva.",
       },
       { property: "og:title", content: "Álbum Galaxia Neón" },
       {
         property: "og:description",
-        content: "Cada imagen con su mensaje y su música. Flotando en el cosmos.",
+        content: "Nuestros mejores recuerdos flotando en la galaxia.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -54,7 +54,7 @@ function Index() {
   }, [fetchPlates]);
 
   const handleResetMemories = async () => {
-    if (window.confirm("¿Deseas restaurar las 10 tarjetas de recuerdos con sus frases y canciones?")) {
+    if (window.confirm("¿Deseas restaurar todas las tarjetas de recuerdos con las fotos, videos y música?")) {
       const resetList = await resetToDefaultPlates();
       setPlates(resetList);
       if (openId) close();
@@ -109,30 +109,29 @@ function Index() {
     el.scrollBy({ left: dir * el.clientWidth * 0.7, behavior: "smooth" });
   };
 
-  // Triplicar para bucle continuo fluido e infinito sin saltos
+  // Duplicar para bucle continuo fluido e infinito sin saltos
   const looped = useMemo(() => {
     if (!plates.length) return [];
-    if (plates.length === 1) return [...plates, ...plates, ...plates, ...plates];
-    if (plates.length < 4) return [...plates, ...plates, ...plates, ...plates];
-    return [...plates, ...plates, ...plates];
+    if (plates.length < 15) return [...plates, ...plates, ...plates];
+    return [...plates, ...plates];
   }, [plates]);
 
   // Movimiento constante y automático hacia la izquierda
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.85; // Velocidad de desplazamiento fluido continuo hacia la izquierda
+    const speed = 0.75; // Velocidad de desplazamiento fluido
 
     const step = () => {
       const el = track.current;
       if (el) {
-        const singleSetWidth = el.scrollWidth / (looped.length / Math.max(1, plates.length));
+        const half = el.scrollWidth / 2;
         
         // Loop infinito suave
-        if (el.scrollLeft >= singleSetWidth * 2) {
-          el.scrollLeft -= singleSetWidth;
+        if (el.scrollLeft >= half) {
+          el.scrollLeft -= half;
         } else if (el.scrollLeft <= 0) {
-          el.scrollLeft += singleSetWidth;
+          el.scrollLeft += half;
         }
 
         if (!isUserInteracting && !isDragging.current) {
@@ -236,7 +235,7 @@ function Index() {
           </div>
           <div>
             <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Álbum Cósmico</h1>
-            <p className="text-[0.7rem] text-muted-foreground">Recuerdos en órbita constante</p>
+            <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita constante</p>
           </div>
         </div>
 
@@ -244,7 +243,7 @@ function Index() {
           <button
             type="button"
             onClick={handleResetMemories}
-            title="Restaurar las 10 tarjetas de recuerdos"
+            title="Restaurar las tarjetas originales"
             className="flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/70 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-md transition-all hover:text-foreground hover:bg-secondary/60 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5 text-accent" />
@@ -306,6 +305,8 @@ function Index() {
           {looped.map((plate, i) => {
             const floatClass = i % 3 === 0 ? "float-card-1" : i % 3 === 1 ? "float-card-2" : "float-card-3";
             const initialOffset = i % 2 === 0 ? "1.5rem" : "-1.5rem";
+            const mediaSrc = plateImageSrc(plate, urlCache.current);
+            const isVid = isMediaVideo(plate, mediaSrc);
 
             return (
               <div
@@ -325,17 +326,28 @@ function Index() {
                   }}
                   className="block w-full text-left cursor-pointer"
                 >
-                  <div className="relative overflow-hidden">
-                    {plateImageSrc(plate, urlCache.current) ? (
-                      <img
-                        src={plateImageSrc(plate, urlCache.current)}
-                        alt={plate.title}
-                        loading={i < 3 ? "eager" : "lazy"}
-                        className="h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-[28rem]"
-                      />
+                  <div className="relative overflow-hidden bg-background/40">
+                    {mediaSrc ? (
+                      isVid ? (
+                        <video
+                          src={mediaSrc}
+                          autoPlay
+                          loop
+                          muted
+                          playsInline
+                          className="h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-[28rem]"
+                        />
+                      ) : (
+                        <img
+                          src={mediaSrc}
+                          alt={plate.title}
+                          loading={i < 4 ? "eager" : "lazy"}
+                          className="h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-[28rem]"
+                        />
+                      )
                     ) : (
                       <div className="flex h-[24rem] w-full items-center justify-center bg-secondary/30 text-sm text-muted-foreground sm:h-[28rem]">
-                        Sin imagen añadida
+                        Sin recurso añadido
                       </div>
                     )}
                     
@@ -350,7 +362,7 @@ function Index() {
 
                     {/* Tag / Badge flotante */}
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full border border-border/60 bg-popover/80 px-3 py-1 text-[0.7rem] font-semibold text-accent backdrop-blur-md shadow-md">
-                      <Sparkles className="h-3 w-3 text-primary" />
+                      {isVid ? <Film className="h-3 w-3 text-primary animate-pulse" /> : <Sparkles className="h-3 w-3 text-primary" />}
                       {plate.tag}
                     </div>
 
@@ -391,7 +403,7 @@ function Index() {
       {/* Indicador de ayuda */}
       <footer className="relative z-10 pb-5 text-center">
         <p className="text-xs text-muted-foreground/80 flex items-center justify-center gap-2">
-          <span>✨</span> Desliza o arrastra para explorar • Toca una foto para escucharla <span>✨</span>
+          <span>✨</span> Desliza o arrastra para explorar • Toca una foto o video para abrirlo <span>✨</span>
         </p>
       </footer>
 
@@ -417,20 +429,36 @@ function Index() {
             className="relative flex flex-col items-center max-h-[92vh] max-w-2xl w-full rounded-3xl border border-border/80 bg-popover/90 p-6 sm:p-8 neon-ring backdrop-blur-3xl overflow-y-auto animate-in zoom-in-95 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Imagen ampliada */}
+            {/* Imagen o Video ampliado */}
             {plateImageSrc(open, urlCache.current) && (
-              <div className="relative group w-full overflow-hidden rounded-2xl border border-border shadow-2xl">
-                <img
-                  src={plateImageSrc(open, urlCache.current)}
-                  alt={open.title}
-                  className="mx-auto max-h-[50vh] w-full object-cover rounded-2xl"
-                />
+              <div className="relative group w-full overflow-hidden rounded-2xl border border-border shadow-2xl bg-black/40">
+                {isMediaVideo(open, plateImageSrc(open, urlCache.current)) ? (
+                  <video
+                    src={plateImageSrc(open, urlCache.current)}
+                    controls
+                    autoPlay
+                    loop
+                    playsInline
+                    className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl"
+                  />
+                ) : (
+                  <img
+                    src={plateImageSrc(open, urlCache.current)}
+                    alt={open.title}
+                    className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl"
+                  />
+                )}
               </div>
             )}
 
             <figcaption className="mt-6 text-center w-full">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/60 px-3.5 py-1 text-xs text-accent">
-                <Sparkles className="h-3.5 w-3.5 text-primary" /> {open.tag}
+                {isMediaVideo(open, plateImageSrc(open, urlCache.current)) ? (
+                  <Film className="h-3.5 w-3.5 text-primary" />
+                ) : (
+                  <Sparkles className="h-3.5 w-3.5 text-primary" />
+                )}
+                {open.tag}
               </span>
 
               <h2 className="mt-3 font-display text-2xl sm:text-3xl font-bold text-neon">

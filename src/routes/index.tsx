@@ -182,27 +182,24 @@ function Index() {
     return [...plates, ...plates];
   }, [plates]);
 
-  // Movimiento constante y automático hacia la izquierda
+  // Movimiento constante, suave y pausado hacia la izquierda
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.75; // Velocidad de desplazamiento fluido
+    const speed = 0.32; // Velocidad suave, relajante y más lenta
 
     const step = () => {
       const el = track.current;
-      if (el) {
+      if (el && !isUserInteracting && !isDragging.current) {
         const half = el.scrollWidth / 2;
-        
-        // Loop infinito suave
-        if (el.scrollLeft >= half) {
-          el.scrollLeft -= half;
-        } else if (el.scrollLeft <= 0) {
-          el.scrollLeft += half;
+        if (half > 0) {
+          if (el.scrollLeft >= half) {
+            el.scrollLeft -= half;
+          } else if (el.scrollLeft <= 0) {
+            el.scrollLeft += half;
+          }
         }
-
-        if (!isUserInteracting && !isDragging.current) {
-          el.scrollLeft += speed;
-        }
+        el.scrollLeft += speed;
       }
       raf = requestAnimationFrame(step);
     };
@@ -211,7 +208,7 @@ function Index() {
     return () => cancelAnimationFrame(raf);
   }, [isUserInteracting, open, editing, looped.length, plates.length]);
 
-  // Manejadores de arrastre con mouse o táctil
+  // Manejadores de arrastre ultra fluidos (bidireccional sin saltos ni bloqueos)
   const handlePointerDown = (e: React.PointerEvent) => {
     const el = track.current;
     if (!el) return;
@@ -227,14 +224,27 @@ function Index() {
     if (!el) return;
     e.preventDefault();
     const x = e.pageX - el.offsetLeft;
-    const walk = (x - startX.current) * 1.5;
-    el.scrollLeft = scrollLeftStart.current - walk;
+    const walk = (x - startX.current) * 1.15;
+    let target = scrollLeftStart.current - walk;
+    const half = el.scrollWidth / 2;
+
+    if (half > 0) {
+      while (target < 0) {
+        target += half;
+        scrollLeftStart.current += half;
+      }
+      while (target >= half * 2) {
+        target -= half;
+        scrollLeftStart.current -= half;
+      }
+    }
+    el.scrollLeft = target;
   };
 
   const handlePointerUp = () => {
     if (isDragging.current) {
       isDragging.current = false;
-      pauseInteraction(2000);
+      pauseInteraction(2500);
     }
   };
 

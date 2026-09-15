@@ -152,7 +152,7 @@ export const DEFAULT_PLATES: Plate[] = [
   },
 ];
 
-const DB_NAME = "album-galaxia-v2";
+const DB_NAME = "album-galaxia-v3";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -167,8 +167,27 @@ function openDb(): Promise<IDBDatabase> {
   });
 }
 
+export async function resetToDefaultPlates(): Promise<Plate[]> {
+  try {
+    const db = await openDb();
+    const tx = db.transaction(STORE, "readwrite");
+    const store = tx.objectStore(STORE);
+    store.clear();
+    await Promise.all(DEFAULT_PLATES.map((p) => store.put(p)));
+  } catch (e) {
+    console.error("Error resetting plates", e);
+  }
+  return [...DEFAULT_PLATES];
+}
+
 export async function loadPlates(): Promise<Plate[]> {
   try {
+    // Si venimos de la versión vieja, limpiamos el indexedDB antiguo
+    try {
+      indexedDB.deleteDatabase("album-galaxia");
+      indexedDB.deleteDatabase("album-galaxia-v2");
+    } catch {}
+
     const db = await openDb();
     const rows = await new Promise<Plate[]>((resolve, reject) => {
       const tx = db.transaction(STORE, "readonly");
@@ -176,7 +195,10 @@ export async function loadPlates(): Promise<Plate[]> {
       req.onsuccess = () => resolve(req.result as Plate[]);
       req.onerror = () => reject(req.error);
     });
-    if (!rows.length) {
+
+    // Si está vacío o tiene las viejas 4 tarjetas de plantilla genéricas ("Corazón de Nebulosa", etc.)
+    const isOldData = rows.length < 10 && rows.some(r => r.title === "Corazón de Nebulosa" || r.title === "Deriva Violeta");
+    if (!rows.length || isOldData) {
       await Promise.all(DEFAULT_PLATES.map(savePlate));
       return [...DEFAULT_PLATES];
     }

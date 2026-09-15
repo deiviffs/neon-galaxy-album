@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Music, Pencil, Play, Plus, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
-import { deletePlate, loadPlates, plateImageSrc, savePlate, type Plate } from "@/lib/album";
+import { deletePlate, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
 
@@ -43,10 +43,23 @@ function Index() {
   const scrollLeftStart = useRef(0);
   const resumeTimer = useRef<number | null>(null);
 
-  useEffect(() => {
-    void loadPlates().then(setPlates);
-    return () => musicEngine.stop();
+  const fetchPlates = useCallback(async () => {
+    const list = await loadPlates();
+    setPlates(list);
   }, []);
+
+  useEffect(() => {
+    void fetchPlates();
+    return () => musicEngine.stop();
+  }, [fetchPlates]);
+
+  const handleResetMemories = async () => {
+    if (window.confirm("¿Deseas restaurar las 10 tarjetas de recuerdos con sus frases y canciones?")) {
+      const resetList = await resetToDefaultPlates();
+      setPlates(resetList);
+      if (openId) close();
+    }
+  };
 
   const open = useMemo(() => plates.find((p) => p.id === openId) ?? null, [plates, openId]);
 
@@ -227,11 +240,20 @@ function Index() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={handleResetMemories}
+            title="Restaurar las 10 tarjetas de recuerdos"
+            className="flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/70 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-md transition-all hover:text-foreground hover:bg-secondary/60 cursor-pointer"
+          >
+            <RotateCcw className="h-3.5 w-3.5 text-accent" />
+            <span className="hidden md:inline">Restaurar recuerdos</span>
+          </button>
           <button
             type="button"
             onClick={addNew}
-            className="flex items-center gap-2 rounded-full px-5 py-2.5 font-display text-xs font-bold text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 rounded-full px-4 py-2.5 font-display text-xs font-bold text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer sm:px-5"
             style={{ backgroundImage: "var(--gradient-neon)" }}
           >
             <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Añadir recuerdo</span><span className="sm:hidden">Añadir</span>
@@ -240,9 +262,9 @@ function Index() {
             type="button"
             onClick={toggleSound}
             aria-label={muted ? "Activar música" : "Silenciar música"}
-            className="shrink-0 rounded-full border border-border bg-popover/70 p-3 text-foreground backdrop-blur-xl transition-all hover:neon-ring hover:scale-105 active:scale-95 cursor-pointer"
+            className="shrink-0 rounded-full border border-border bg-popover/70 p-2.5 text-foreground backdrop-blur-xl transition-all hover:neon-ring hover:scale-105 active:scale-95 cursor-pointer sm:p-3"
           >
-            {muted ? <VolumeX className="h-5 w-5 text-muted-foreground" /> : <Volume2 className="h-5 w-5 text-accent animate-pulse" />}
+            {muted ? <VolumeX className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5" /> : <Volume2 className="h-4 w-4 text-accent animate-pulse sm:h-5 sm:w-5" />}
           </button>
         </div>
       </header>

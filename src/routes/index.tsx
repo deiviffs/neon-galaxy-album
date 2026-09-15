@@ -80,15 +80,19 @@ function Index() {
     window.setTimeout(() => setPaused(false), 2500);
   };
 
-  // Deriva automática y suave hacia la izquierda (scroll infinito)
+  // Deriva automática infinita hacia la izquierda (bucle sin fin)
+  const looped = useMemo(() => (plates.length >= 2 ? [...plates, ...plates] : plates), [plates]);
+
   useEffect(() => {
-    if (paused || open || editing || plates.length < 2) return;
+    if (open || editing || plates.length < 2) return;
     let raf = 0;
     const step = () => {
       const el = track.current;
       if (el) {
-        const max = el.scrollWidth - el.clientWidth;
-        el.scrollLeft = max > 0 && el.scrollLeft >= max - 1 ? 0 : el.scrollLeft + 0.45;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+        else if (el.scrollLeft <= 0) el.scrollLeft += half;
+        if (!paused) el.scrollLeft += 0.45;
       }
       raf = requestAnimationFrame(step);
     };
@@ -186,9 +190,9 @@ function Index() {
           onMouseLeave={() => setPaused(false)}
           className="flex w-full items-center gap-6 overflow-x-auto px-6 py-16 sm:px-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
-          {plates.map((plate, i) => (
+          {looped.map((plate, i) => (
             <article
-              key={plate.id}
+              key={`${plate.id}-${i}`}
               style={{ transform: `translateY(${i % 2 === 0 ? "2.5rem" : "-2.5rem"})` }}
               className="group relative w-[70vw] max-w-sm shrink-0 overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:neon-ring"
             >
@@ -239,6 +243,7 @@ function Index() {
             </article>
           ))}
 
+          {plates.length < 2 && (
           <button
             type="button"
             onClick={addNew}
@@ -248,6 +253,7 @@ function Index() {
             <Plus className="h-8 w-8 text-primary" />
             <span className="font-display text-xs tracking-[0.3em] uppercase">Anexar imagen</span>
           </button>
+          )}
         </div>
       </section>
 

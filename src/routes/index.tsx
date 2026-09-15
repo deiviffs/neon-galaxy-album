@@ -386,23 +386,7 @@ function Index() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            onClick={handleResetMemories}
-            title="Restaurar las tarjetas originales"
-            className="flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/70 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-md transition-all hover:text-foreground hover:bg-secondary/60 cursor-pointer"
-          >
-            <RotateCcw className="h-3.5 w-3.5 text-accent" />
-            <span className="hidden md:inline">Restaurar recuerdos</span>
-          </button>
-          <button
-            type="button"
-            onClick={addNew}
-            className="flex items-center gap-2 rounded-full px-4 py-2.5 font-display text-xs font-bold text-primary-foreground shadow-lg transition-transform hover:scale-105 active:scale-95 cursor-pointer sm:px-5"
-            style={{ backgroundImage: "var(--gradient-neon)" }}
-          >
-            <Plus className="h-4 w-4" /> <span className="hidden sm:inline">Añadir recuerdo</span><span className="sm:hidden">Añadir</span>
-          </button>
+          {/* Botón de Música / Volumen */}
           <button
             type="button"
             onClick={toggleSound}
@@ -531,18 +515,7 @@ function Index() {
                   </div>
                 </button>
 
-                {/* Botón de edición */}
-                <button
-                  type="button"
-                  aria-label={`Editar ${plate.title}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setEditing({ plate, isNew: false });
-                  }}
-                  className="absolute top-4 right-4 z-20 rounded-full border border-border bg-popover/80 p-2.5 text-foreground backdrop-blur-md transition-all hover:bg-primary/40 hover:scale-110 active:scale-95 cursor-pointer shadow-md"
-                >
-                  <Pencil className="h-4 w-4" />
-                </button>
+                
               </div>
             );
           })}
@@ -664,20 +637,7 @@ function Index() {
                 </button>
               </div>
 
-              {/* Botón de editar este recuerdo desde el modal */}
-              <div className="mt-5 flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => {
-                    const currentOpen = open;
-                    close();
-                    setEditing({ plate: currentOpen, isNew: false });
-                  }}
-                  className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground underline transition-colors cursor-pointer"
-                >
-                  <Pencil className="h-3.5 w-3.5" /> Editar este recuerdo
-                </button>
-              </div>
+              
             </figcaption>
           </figure>
         </div>

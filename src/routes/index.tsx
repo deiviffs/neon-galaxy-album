@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
-import { CosmicStarfield } from "@/components/CosmicStarfield";
 import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
+import interstellarAudioUrl from "@/assets/audio/interstellar-piano.mp3";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -14,12 +14,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Álbum cósmico con fotos, videos, mensajes románticos y música. Interstellar en piano acústico y galaxia reactiva.",
+          "Álbum cósmico con fotos, videos, mensajes románticos y música. Flotación cósmica y rotación interactiva.",
       },
       { property: "og:title", content: "Álbum Galaxia Neón" },
       {
         property: "og:description",
-        content: "Nuestros mejores recuerdos flotando en la galaxia al compás del piano de Interstellar.",
+        content: "Nuestros mejores recuerdos flotando en la galaxia.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -33,10 +33,8 @@ function Index() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [editing, setEditing] = useState<{ plate: Plate; isNew: boolean } | null>(null);
   const [muted, setMuted] = useState(false);
-  const [isPlayingCardAudio, setIsPlayingCardAudio] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
-  const [hasStartedBgMusic, setHasStartedBgMusic] = useState(false);
-  
   const urlCache = useRef(new Map<string, string>());
   const track = useRef<HTMLDivElement>(null);
 
@@ -56,26 +54,6 @@ function Index() {
     return () => musicEngine.stop();
   }, [fetchPlates]);
 
-  // Iniciar Interstellar en piano al primer clic o interacción
-  const startAudioOnFirstInteraction = useCallback(() => {
-    if (!hasStartedBgMusic && !muted && !openId && !editing) {
-      setHasStartedBgMusic(true);
-      void musicEngine.startBackgroundInterstellar();
-    }
-  }, [hasStartedBgMusic, muted, openId, editing]);
-
-  useEffect(() => {
-    const handleInitialGesture = () => {
-      startAudioOnFirstInteraction();
-    };
-    window.addEventListener("click", handleInitialGesture, { once: true });
-    window.addEventListener("touchstart", handleInitialGesture, { once: true });
-    return () => {
-      window.removeEventListener("click", handleInitialGesture);
-      window.removeEventListener("touchstart", handleInitialGesture);
-    };
-  }, [startAudioOnFirstInteraction]);
-
   const handleResetMemories = async () => {
     if (window.confirm("¿Deseas restaurar todas las tarjetas de recuerdos con las fotos, videos y música?")) {
       const resetList = await resetToDefaultPlates();
@@ -86,11 +64,13 @@ function Index() {
 
   const open = useMemo(() => plates.find((p) => p.id === openId) ?? null, [plates, openId]);
 
-  // Reproducir audio de la tarjeta (y pausar Interstellar)
   const playFor = useCallback(
     (plate: Plate) => {
+      if (bgAudioRef.current) {
+        bgAudioRef.current.pause();
+      }
       if (muted) return;
-      setIsPlayingCardAudio(true);
+      setIsPlayingAudio(true);
       if (plate.audioBlob) {
         const key = `aud-${plate.id}`;
         let url = urlCache.current.get(key);
@@ -98,23 +78,19 @@ function Index() {
           url = URL.createObjectURL(plate.audioBlob);
           urlCache.current.set(key, url);
         }
-        void musicEngine.playCardFile(url);
+        void musicEngine.playFile(url);
       } else {
-        void musicEngine.playCardMelody(plate.melody);
+        void musicEngine.playMelody(plate.melody);
       }
     },
     [muted],
   );
 
-  // Cerrar tarjeta (y reanudar Interstellar en piano)
   const close = useCallback(() => {
     setOpenId(null);
-    setIsPlayingCardAudio(false);
-    musicEngine.stopCardAudio();
-    if (!muted) {
-      void musicEngine.startBackgroundInterstellar();
-    }
-  }, [muted]);
+    setIsPlayingAudio(false);
+    musicEngine.stop();
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
@@ -148,7 +124,7 @@ function Index() {
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.75; // Velocidad de desplazamiento fluido continuo
+    const speed = 0.75; // Velocidad de desplazamiento fluido
 
     const step = () => {
       const el = track.current;
@@ -175,7 +151,6 @@ function Index() {
 
   // Manejadores de arrastre con mouse o táctil
   const handlePointerDown = (e: React.PointerEvent) => {
-    startAudioOnFirstInteraction();
     const el = track.current;
     if (!el) return;
     isDragging.current = true;
@@ -242,26 +217,20 @@ function Index() {
   const toggleSound = () => {
     if (muted) {
       setMuted(false);
-      musicEngine.setMuted(false);
       if (open) {
         playFor(open);
-      } else {
-        musicEngine.startBackgroundInterstellar();
       }
     } else {
       setMuted(true);
-      musicEngine.setMuted(true);
-      setIsPlayingCardAudio(false);
+      setIsPlayingAudio(false);
+      musicEngine.stop();
     }
   };
 
   return (
-    <main
-      onClick={startAudioOnFirstInteraction}
-      className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden"
-    >
-      {/* Fondo de galaxia y estrellas reactivas a cada tecla del piano de Interstellar */}
-      <CosmicStarfield active={!muted} />
+    <main className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden">
+      {/* Fondo de estrellas animadas */}
+      <div className="pointer-events-none absolute inset-0 starfield opacity-80" aria-hidden />
 
       {/* Barra superior */}
       <header className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10">
@@ -271,14 +240,7 @@ function Index() {
           </div>
           <div>
             <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Álbum Cósmico</h1>
-            <div className="flex items-center gap-2">
-              <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita</p>
-              {!muted && !open && (
-                <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[0.65rem] text-primary font-medium shadow-sm">
-                  <Music className="h-2.5 w-2.5 animate-bounce" /> Interstellar (Solo Piano) 🎹
-                </span>
-              )}
-            </div>
+            <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita constante</p>
           </div>
         </div>
 
@@ -290,7 +252,7 @@ function Index() {
             className="flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/70 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-md transition-all hover:text-foreground hover:bg-secondary/60 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5 text-accent" />
-            <span className="hidden md:inline">Restaurar</span>
+            <span className="hidden md:inline">Restaurar recuerdos</span>
           </button>
           <button
             type="button"
@@ -517,19 +479,19 @@ function Index() {
                 “{open.message}”
               </p>
 
-              {/* Reproductor / Visualizador de música del recuerdo */}
+              {/* Reproductor / Visualizador de música */}
               <div className="mt-6 flex items-center justify-center gap-4 rounded-2xl border border-border/80 bg-secondary/40 px-5 py-3.5 shadow-inner">
                 {/* Ecualizador animado */}
                 <div className="flex items-end gap-1 h-6 px-1">
-                  <span className={`w-1 bg-primary rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-1" : "h-2"}`} />
-                  <span className={`w-1 bg-accent rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-2" : "h-3"}`} />
-                  <span className={`w-1 bg-stardust rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-3" : "h-1"}`} />
-                  <span className={`w-1 bg-primary rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-4" : "h-3"}`} />
+                  <span className={`w-1 bg-primary rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-1" : "h-2"}`} />
+                  <span className={`w-1 bg-accent rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-2" : "h-3"}`} />
+                  <span className={`w-1 bg-stardust rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-3" : "h-1"}`} />
+                  <span className={`w-1 bg-primary rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-4" : "h-3"}`} />
                 </div>
 
                 <div className="text-left">
                   <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase">
-                    Sonido del Recuerdo
+                    Sonido Cósmico
                   </p>
                   <p className="text-xs font-semibold text-foreground truncate max-w-[200px]">
                     {open.audioName ?? getMelody(open.melody).name}
@@ -539,18 +501,17 @@ function Index() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (isPlayingCardAudio && !muted) {
-                      musicEngine.stopCardAudio();
-                      setIsPlayingCardAudio(false);
+                    if (isPlayingAudio && !muted) {
+                      musicEngine.stop();
+                      setIsPlayingAudio(false);
                     } else {
                       setMuted(false);
-                      musicEngine.setMuted(false);
                       playFor(open);
                     }
                   }}
                   className="ml-auto flex items-center gap-1.5 rounded-full border border-border bg-primary/20 px-3.5 py-1.5 text-xs text-primary-foreground font-medium hover:bg-primary/30 transition-all cursor-pointer"
                 >
-                  {isPlayingCardAudio && !muted ? (
+                  {isPlayingAudio && !muted ? (
                     <>
                       <VolumeX className="h-3.5 w-3.5 text-accent" /> Pausar
                     </>
@@ -589,11 +550,8 @@ function Index() {
           onSave={handleSave}
           onDelete={handleDelete}
           onClose={() => {
-            musicEngine.stopCardAudio();
+            musicEngine.stop();
             setEditing(null);
-            if (!muted) {
-              void musicEngine.startBackgroundInterstellar();
-            }
           }}
         />
       )}

@@ -50,8 +50,8 @@ export const DEFAULT_PLATES: Plate[] = [
     id: "p1",
     title: "La Casualidad de Messenger",
     tag: "01 • El Comienzo",
-    message: "Recuerdo perfectamente cómo empezamos: aquella confusión por Messenger, por pura casualidad, fue el inicio de algo maravilloso ✨",
-    imageUrl: mem01,
+    message: "Recuerdo perfectamente cómo empezamos: aquella confusión por Messenger, por pura casualidad, fue el inicio de algo maravilloso en los 15 años de mi hermana ✨",
+    imageUrl: mem10,
     imageBlob: null,
     isVideo: false,
     rotation: 0,
@@ -186,7 +186,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Querer Sin Fecha de Caducidad",
     tag: "10 • Eterno",
     message: "Es mentira que voy a dejar de quererte: eso no se borra ni hoy, ni mañana, ni con el paso del tiempo 🌌",
-    imageUrl: mem07,
+    imageUrl: mem01,
     imageBlob: null,
     isVideo: false,
     rotation: 0,
@@ -498,7 +498,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v35";
+const DB_NAME = "album-galaxia-v40";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

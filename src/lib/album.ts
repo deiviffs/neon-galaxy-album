@@ -25,7 +25,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Corazón de Nebulosa",
     tag: "01 · Nebulosa",
     message:
-      "Si el universo late, late con tu ritmo. Entre todo este rosa y este azul, sigues siendo lo más bonito que he visto.",
+      "Si el universo late, late con tu ritmo 💖 Entre todo este rosa y este azul, sigues siendo lo más bonito que he visto ✨",
     imageUrl: cosmos1,
     imageBlob: null,
     melody: "orbita",
@@ -38,7 +38,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Deriva Violeta",
     tag: "02 · Órbita",
     message:
-      "Floto sin gravedad cada vez que me miras. No necesito planeta: contigo cualquier lugar es hogar.",
+      "Floto sin gravedad cada vez que me miras 🧸 No necesito planeta: contigo cualquier lugar es hogar 💖",
     imageUrl: cosmos2,
     imageBlob: null,
     melody: "venus",
@@ -51,7 +51,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Espiral Infinita",
     tag: "03 · Espiral",
     message:
-      "Mil millones de estrellas girando y ninguna se compara. Te elegiría en cada vuelta de esta galaxia.",
+      "Mil millones de estrellas girando y ninguna se compara ✨ Te elegiría en cada vuelta de esta galaxia 💖",
     imageUrl: cosmos3,
     imageBlob: null,
     melody: "latido",
@@ -64,7 +64,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Horizonte de Neón",
     tag: "04 · Horizonte",
     message:
-      "Caminemos esta rejilla de luz hasta donde no haya final. Yo llevo la música, tú llevas el brillo.",
+      "Caminemos esta luz hasta donde no haya final 🧸 Yo llevo la música, tú llevas el brillo ✨💖",
     imageUrl: cosmos4,
     imageBlob: null,
     melody: "deriva",

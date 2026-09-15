@@ -434,7 +434,7 @@ function Index() {
                       </p>
                       <div className="mt-3 flex items-center gap-2 text-xs text-accent">
                         <Music className="h-3.5 w-3.5 animate-bounce" />
-                        <span className="truncate">{plate.audioName ?? getMelody(plate.melody).name}</span>
+                        <span className="truncate font-medium">{plate.audioName || "Canción Romántica"}</span>
                       </div>
                     </div>
                   </div>
@@ -539,12 +539,12 @@ function Index() {
                   <span className={`w-1 bg-primary rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-4" : "h-3"}`} />
                 </div>
 
-                <div className="text-left">
-                  <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase">
-                    Sonido Cósmico
+                <div className="text-left flex-1 min-w-0">
+                  <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase font-semibold">
+                    Canción del Recuerdo
                   </p>
-                  <p className="text-xs font-semibold text-foreground truncate max-w-[200px]">
-                    {open.audioName ?? getMelody(open.melody).name}
+                  <p className="text-xs sm:text-sm font-bold text-foreground truncate max-w-[280px]" title={open.audioName || "Canción Romántica"}>
+                    {open.audioName || "Canción Romántica"}
                   </p>
                 </div>
 

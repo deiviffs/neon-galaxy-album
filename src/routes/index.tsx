@@ -243,6 +243,7 @@ function Index() {
             </article>
           ))}
 
+          {plates.length < 2 && (
           <button
             type="button"
             onClick={addNew}

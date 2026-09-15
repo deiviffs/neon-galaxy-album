@@ -22,10 +22,10 @@ export type Plate = {
 export const DEFAULT_PLATES: Plate[] = [
   {
     id: "p1",
-    title: "La Casualidad de Messenger",
+    title: "La Casualidad Mágica",
     tag: "01 • El Inicio",
     message:
-      "Recuerdo perfectamente cómo empezamos; aquella confusión por Messenger, por pura casualidad, fue lo que hizo que nos encontráramos y empezáramos a construir algo tan bonito ✨",
+      "Recuerdo perfectamente cómo empezamos; aquella confusión por Messenger, por pura casualidad, fue lo que hizo que nos encontráramos y empezáramos a construir esta historia tan bonita ✨",
     imageUrl: cosmos1,
     imageBlob: null,
     melody: "orbita",
@@ -35,10 +35,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p2",
-    title: "Nuestras Bromas y Momentos",
-    tag: "02 • Complicidad",
+    title: "La Magia del Comienzo",
+    tag: "02 • Primer Destello",
     message:
-      "Recuerdo cómo compartíamos tiempo, las risas, las bromas, las veces que ibas a mi casa... Poco a poco me hiciste cambiar de parecer y empecé a quererte con todo el corazón 💫",
+      "Te conocí cuando ni siquiera estaba buscando amor... Al principio todo fue mágico: valía la pena arriesgar el aliento, los suspiros y las sonrisas por algo tan hermoso 💫",
     imageUrl: cosmos2,
     imageBlob: null,
     melody: "venus",
@@ -48,10 +48,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p3",
-    title: "Creer en lo Imposible",
-    tag: "03 • Destello",
+    title: "Nuestras Risas y Complicidad",
+    tag: "03 • Complicidad",
     message:
-      "Una vez me preguntaste si te quería... Y siempre sigo aquí, porque contigo elegí creer en lo imposible y en la magia de quererte de verdad 💖",
+      "Recuerdo cómo compartíamos tiempo, las risas, las bromas, las veces que ibas a mi casa... Poco a poco tú me hiciste cambiar de parecer y empecé a amarte con todo el corazón 🌹",
     imageUrl: cosmos3,
     imageBlob: null,
     melody: "latido",
@@ -61,10 +61,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p4",
-    title: "Crear Nuestro Propio Destino",
-    tag: "04 • Constelación",
+    title: "Creer en lo Imposible",
+    tag: "04 • Ilusión",
     message:
-      "No soy de los que deja las cosas al azar. Yo prefiero trabajar en nuestro destino y mejorarlo, porque el destino se crea con lo que uno hace con amor 🪐✨",
+      "Una vez me preguntaste si te quería... Y siempre sigo aquí, porque contigo elegí creer en lo imposible y en la magia de quererte de verdad 💖",
     imageUrl: cosmos4,
     imageBlob: null,
     melody: "deriva",
@@ -74,10 +74,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p5",
-    title: "Llegaste Sin Permiso",
-    tag: "05 • Magia Pura",
+    title: "Crear Nuestro Destino",
+    tag: "05 • Constelación",
     message:
-      "Te conocí cuando ni siquiera estaba buscando amor, pero la vida tiene sus propias formas de llegar... Al principio todo fue mágico: valía la pena arriesgar el aliento y las sonrisas 🌹",
+      "No soy de los que deja las cosas al azar. Yo prefiero trabajar en ese destino a tu lado y mejorarlo, porque el destino se crea con lo que uno hace con el corazón 🪐✨",
     imageUrl: cosmos1,
     imageBlob: null,
     melody: "cristal",
@@ -90,7 +90,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Una Huella Imborrable",
     tag: "06 • Luz Estelar",
     message:
-      "Llegaste a mi vida cuando menos lo esperaba y te convertiste en una de las personas más importantes para mí. Me hiciste volver a creer en algo bonito ✨💫",
+      "Llegaste a mi vida cuando menos lo esperaba y te convertiste en una de las personas más importantes para mí. Me hiciste volver a creer en algo bonito ✨💖",
     imageUrl: cosmos2,
     imageBlob: null,
     melody: "nocturno",
@@ -101,9 +101,9 @@ export const DEFAULT_PLATES: Plate[] = [
   {
     id: "p7",
     title: "Soñar a Tu Lado",
-    tag: "07 • Horizonte",
+    tag: "07 • Infinito",
     message:
-      "Durante un tiempo imaginé un futuro a tu lado y fui inmensamente feliz haciéndolo. Gracias por cada conversación y por cada recuerdo compartido en tranquilidad 🌌💖",
+      "Durante un tiempo imaginé un futuro a tu lado y fui inmensamente feliz haciéndolo. Gracias por cada momento, por cada conversación y por la tranquilidad que me diste 🌌",
     imageUrl: cosmos3,
     imageBlob: null,
     melody: "orbita",
@@ -116,7 +116,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Tus Ocurrencias y Detalles",
     tag: "08 • Especial",
     message:
-      "Tu forma de ser, nuestras charlas, tus ocurrencias y cada pequeño detalle que te hace única... todo eso tiene un lugar especial e imborrable en mi corazón 🧸✨",
+      "Tu forma de ser, nuestras charlas, tus ocurrencias y cada pequeño detalle que te hacía especial... todo eso tiene un lugar eterno e imborrable en mi corazón 🧸✨",
     imageUrl: cosmos4,
     imageBlob: null,
     melody: "latido",
@@ -126,10 +126,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p9",
-    title: "La Historia Aún Sigue",
+    title: "Sentimiento Incondicional",
     tag: "09 • Promesa",
     message:
-      "Esto no es un adiós. Te quiero demasiado; estaré allí para ti siempre que me necesites, hasta el día en que ya no me necesites. No dudes en escribirme 💖",
+      "Es mentira que voy a dejar de quererte; estaré allí para ti siempre, siempre que me necesites, hasta el día en que ya no me necesites. La historia aún sigue ✨💖",
     imageUrl: cosmos1,
     imageBlob: null,
     melody: "venus",
@@ -152,7 +152,7 @@ export const DEFAULT_PLATES: Plate[] = [
   },
 ];
 
-const DB_NAME = "album-galaxia-v3";
+const DB_NAME = "album-galaxia-v4";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -182,10 +182,10 @@ export async function resetToDefaultPlates(): Promise<Plate[]> {
 
 export async function loadPlates(): Promise<Plate[]> {
   try {
-    // Si venimos de la versión vieja, limpiamos el indexedDB antiguo
     try {
       indexedDB.deleteDatabase("album-galaxia");
       indexedDB.deleteDatabase("album-galaxia-v2");
+      indexedDB.deleteDatabase("album-galaxia-v3");
     } catch {}
 
     const db = await openDb();
@@ -196,9 +196,7 @@ export async function loadPlates(): Promise<Plate[]> {
       req.onerror = () => reject(req.error);
     });
 
-    // Si está vacío o tiene las viejas 4 tarjetas de plantilla genéricas ("Corazón de Nebulosa", etc.)
-    const isOldData = rows.length < 10 && rows.some(r => r.title === "Corazón de Nebulosa" || r.title === "Deriva Violeta");
-    if (!rows.length || isOldData) {
+    if (!rows.length || rows.length < 10) {
       await Promise.all(DEFAULT_PLATES.map(savePlate));
       return [...DEFAULT_PLATES];
     }

@@ -13,12 +13,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Álbum cósmico con fotos, videos, mensajes románticos y música. Flotación cósmica y rotación interactiva.",
+          "Álbum cósmico con fotos, videos, mensajes románticos y música. Golden Hour en piano y rotación interactiva.",
       },
       { property: "og:title", content: "Álbum Galaxia Neón" },
       {
         property: "og:description",
-        content: "Nuestros mejores recuerdos flotando en la galaxia.",
+        content: "Nuestros mejores recuerdos flotando en la galaxia al ritmo de Golden Hour.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -32,8 +32,10 @@ function Index() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [editing, setEditing] = useState<{ plate: Plate; isNew: boolean } | null>(null);
   const [muted, setMuted] = useState(false);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [isPlayingCardAudio, setIsPlayingCardAudio] = useState(false);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [hasStartedBgMusic, setHasStartedBgMusic] = useState(false);
+  
   const urlCache = useRef(new Map<string, string>());
   const track = useRef<HTMLDivElement>(null);
 
@@ -53,6 +55,26 @@ function Index() {
     return () => musicEngine.stop();
   }, [fetchPlates]);
 
+  // Iniciar Golden Hour al primer clic o interacción del usuario
+  const startAudioOnFirstInteraction = useCallback(() => {
+    if (!hasStartedBgMusic && !muted && !openId && !editing) {
+      setHasStartedBgMusic(true);
+      void musicEngine.startBackgroundGoldenHour();
+    }
+  }, [hasStartedBgMusic, muted, openId, editing]);
+
+  useEffect(() => {
+    const handleInitialGesture = () => {
+      startAudioOnFirstInteraction();
+    };
+    window.addEventListener("click", handleInitialGesture, { once: true });
+    window.addEventListener("touchstart", handleInitialGesture, { once: true });
+    return () => {
+      window.removeEventListener("click", handleInitialGesture);
+      window.removeEventListener("touchstart", handleInitialGesture);
+    };
+  }, [startAudioOnFirstInteraction]);
+
   const handleResetMemories = async () => {
     if (window.confirm("¿Deseas restaurar todas las tarjetas de recuerdos con las fotos, videos y música?")) {
       const resetList = await resetToDefaultPlates();
@@ -63,10 +85,11 @@ function Index() {
 
   const open = useMemo(() => plates.find((p) => p.id === openId) ?? null, [plates, openId]);
 
+  // Reproducir audio de la tarjeta (y pausar Golden Hour)
   const playFor = useCallback(
     (plate: Plate) => {
       if (muted) return;
-      setIsPlayingAudio(true);
+      setIsPlayingCardAudio(true);
       if (plate.audioBlob) {
         const key = `aud-${plate.id}`;
         let url = urlCache.current.get(key);
@@ -74,19 +97,23 @@ function Index() {
           url = URL.createObjectURL(plate.audioBlob);
           urlCache.current.set(key, url);
         }
-        void musicEngine.playFile(url);
+        void musicEngine.playCardFile(url);
       } else {
-        void musicEngine.playMelody(plate.melody);
+        void musicEngine.playCardMelody(plate.melody);
       }
     },
     [muted],
   );
 
+  // Cerrar tarjeta (y reanudar Golden Hour en piano)
   const close = useCallback(() => {
     setOpenId(null);
-    setIsPlayingAudio(false);
-    musicEngine.stop();
-  }, []);
+    setIsPlayingCardAudio(false);
+    musicEngine.stopCardAudio();
+    if (!muted) {
+      void musicEngine.startBackgroundGoldenHour();
+    }
+  }, [muted]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
@@ -120,7 +147,7 @@ function Index() {
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.75; // Velocidad de desplazamiento fluido
+    const speed = 0.75; // Velocidad de desplazamiento fluido continuo
 
     const step = () => {
       const el = track.current;
@@ -147,6 +174,7 @@ function Index() {
 
   // Manejadores de arrastre con mouse o táctil
   const handlePointerDown = (e: React.PointerEvent) => {
+    startAudioOnFirstInteraction();
     const el = track.current;
     if (!el) return;
     isDragging.current = true;
@@ -213,18 +241,24 @@ function Index() {
   const toggleSound = () => {
     if (muted) {
       setMuted(false);
+      musicEngine.setMuted(false);
       if (open) {
         playFor(open);
+      } else {
+        musicEngine.startBackgroundGoldenHour();
       }
     } else {
       setMuted(true);
-      setIsPlayingAudio(false);
-      musicEngine.stop();
+      musicEngine.setMuted(true);
+      setIsPlayingCardAudio(false);
     }
   };
 
   return (
-    <main className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden">
+    <main
+      onClick={startAudioOnFirstInteraction}
+      className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden"
+    >
       {/* Fondo de estrellas animadas */}
       <div className="pointer-events-none absolute inset-0 starfield opacity-80" aria-hidden />
 
@@ -236,7 +270,14 @@ function Index() {
           </div>
           <div>
             <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Álbum Cósmico</h1>
-            <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita constante</p>
+            <div className="flex items-center gap-2">
+              <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita</p>
+              {!muted && !open && (
+                <span className="hidden sm:inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/10 px-2 py-0.5 text-[0.65rem] text-primary font-medium">
+                  <Music className="h-2.5 w-2.5 animate-bounce" /> Golden Hour (Piano)
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
@@ -248,7 +289,7 @@ function Index() {
             className="flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/70 px-3.5 py-2 text-xs text-muted-foreground backdrop-blur-md transition-all hover:text-foreground hover:bg-secondary/60 cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5 text-accent" />
-            <span className="hidden md:inline">Restaurar recuerdos</span>
+            <span className="hidden md:inline">Restaurar</span>
           </button>
           <button
             type="button"
@@ -475,19 +516,19 @@ function Index() {
                 “{open.message}”
               </p>
 
-              {/* Reproductor / Visualizador de música */}
+              {/* Reproductor / Visualizador de música del recuerdo */}
               <div className="mt-6 flex items-center justify-center gap-4 rounded-2xl border border-border/80 bg-secondary/40 px-5 py-3.5 shadow-inner">
                 {/* Ecualizador animado */}
                 <div className="flex items-end gap-1 h-6 px-1">
-                  <span className={`w-1 bg-primary rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-1" : "h-2"}`} />
-                  <span className={`w-1 bg-accent rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-2" : "h-3"}`} />
-                  <span className={`w-1 bg-stardust rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-3" : "h-1"}`} />
-                  <span className={`w-1 bg-primary rounded-full ${isPlayingAudio && !muted ? "animate-sound-bar-4" : "h-3"}`} />
+                  <span className={`w-1 bg-primary rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-1" : "h-2"}`} />
+                  <span className={`w-1 bg-accent rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-2" : "h-3"}`} />
+                  <span className={`w-1 bg-stardust rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-3" : "h-1"}`} />
+                  <span className={`w-1 bg-primary rounded-full ${isPlayingCardAudio && !muted ? "animate-sound-bar-4" : "h-3"}`} />
                 </div>
 
                 <div className="text-left">
                   <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase">
-                    Sonido Cósmico
+                    Sonido del Recuerdo
                   </p>
                   <p className="text-xs font-semibold text-foreground truncate max-w-[200px]">
                     {open.audioName ?? getMelody(open.melody).name}
@@ -497,17 +538,18 @@ function Index() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (isPlayingAudio && !muted) {
-                      musicEngine.stop();
-                      setIsPlayingAudio(false);
+                    if (isPlayingCardAudio && !muted) {
+                      musicEngine.stopCardAudio();
+                      setIsPlayingCardAudio(false);
                     } else {
                       setMuted(false);
+                      musicEngine.setMuted(false);
                       playFor(open);
                     }
                   }}
                   className="ml-auto flex items-center gap-1.5 rounded-full border border-border bg-primary/20 px-3.5 py-1.5 text-xs text-primary-foreground font-medium hover:bg-primary/30 transition-all cursor-pointer"
                 >
-                  {isPlayingAudio && !muted ? (
+                  {isPlayingCardAudio && !muted ? (
                     <>
                       <VolumeX className="h-3.5 w-3.5 text-accent" /> Pausar
                     </>
@@ -546,8 +588,11 @@ function Index() {
           onSave={handleSave}
           onDelete={handleDelete}
           onClose={() => {
-            musicEngine.stop();
+            musicEngine.stopCardAudio();
             setEditing(null);
+            if (!muted) {
+              void musicEngine.startBackgroundGoldenHour();
+            }
           }}
         />
       )}

@@ -29,12 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [isUnlocked, setIsUnlocked] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("galaxy_unlocked_josefina") === "true";
-    }
-    return false;
-  });
+  const [isUnlocked, setIsUnlocked] = useState<boolean>(false);
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [plates, setPlates] = useState<Plate[]>(DEFAULT_PLATES);
@@ -96,9 +91,7 @@ function Index() {
     const clean = passwordInput.trim().toUpperCase();
     if (clean === "JOSEFINA") {
       setIsUnlocked(true);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("galaxy_unlocked_josefina", "true");
-      }
+      
       // Start background Interstellar music immediately upon unlocking
       if (bgAudioRef.current && !muted) {
         bgAudioRef.current.volume = 0.75;
@@ -182,21 +175,19 @@ function Index() {
     return [...plates, ...plates];
   }, [plates]);
 
-  // Movimiento constante, suave y pausado hacia la izquierda
+  // Movimiento constante, suave, relajante e infinito hacia la izquierda
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.32; // Velocidad suave, relajante y más lenta
+    const speed = 0.45; // Velocidad pausada, suave y relajante
 
     const step = () => {
       const el = track.current;
       if (el && !isUserInteracting && !isDragging.current) {
-        const half = el.scrollWidth / 2;
-        if (half > 0) {
-          if (el.scrollLeft >= half) {
-            el.scrollLeft -= half;
-          } else if (el.scrollLeft <= 0) {
-            el.scrollLeft += half;
+        const maxLoop = el.scrollWidth / 2;
+        if (maxLoop > 0) {
+          if (el.scrollLeft >= maxLoop) {
+            el.scrollLeft -= maxLoop;
           }
         }
         el.scrollLeft += speed;
@@ -208,7 +199,7 @@ function Index() {
     return () => cancelAnimationFrame(raf);
   }, [isUserInteracting, open, editing, looped.length, plates.length]);
 
-  // Manejadores de arrastre ultra fluidos (bidireccional sin saltos ni bloqueos)
+  // Manejadores de arrastre fluidos y naturales
   const handlePointerDown = (e: React.PointerEvent) => {
     const el = track.current;
     if (!el) return;
@@ -224,18 +215,17 @@ function Index() {
     if (!el) return;
     e.preventDefault();
     const x = e.pageX - el.offsetLeft;
-    const walk = (x - startX.current) * 1.15;
+    const walk = (x - startX.current) * 1.25;
     let target = scrollLeftStart.current - walk;
-    const half = el.scrollWidth / 2;
+    const maxLoop = el.scrollWidth / 2;
 
-    if (half > 0) {
-      while (target < 0) {
-        target += half;
-        scrollLeftStart.current += half;
-      }
-      while (target >= half * 2) {
-        target -= half;
-        scrollLeftStart.current -= half;
+    if (maxLoop > 0) {
+      if (target < 0) {
+        target += maxLoop;
+        scrollLeftStart.current += maxLoop;
+      } else if (target >= maxLoop * 2) {
+        target -= maxLoop;
+        scrollLeftStart.current -= maxLoop;
       }
     }
     el.scrollLeft = target;
@@ -244,7 +234,7 @@ function Index() {
   const handlePointerUp = () => {
     if (isDragging.current) {
       isDragging.current = false;
-      pauseInteraction(2500);
+      pauseInteraction(1500);
     }
   };
 

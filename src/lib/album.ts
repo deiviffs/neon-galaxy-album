@@ -22,10 +22,10 @@ export type Plate = {
 export const DEFAULT_PLATES: Plate[] = [
   {
     id: "p1",
-    title: "Corazón de Nebulosa",
-    tag: "01 · Nebulosa",
+    title: "La Casualidad de Messenger",
+    tag: "01 • El Inicio",
     message:
-      "Si el universo late, late con tu ritmo 💖 Entre todo este rosa y este azul, sigues siendo lo más bonito que he visto ✨",
+      "Recuerdo perfectamente cómo empezamos; aquella confusión por Messenger, por pura casualidad, fue lo que hizo que nos encontráramos y empezáramos a construir algo tan bonito ✨",
     imageUrl: cosmos1,
     imageBlob: null,
     melody: "orbita",
@@ -35,10 +35,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p2",
-    title: "Deriva Violeta",
-    tag: "02 · Órbita",
+    title: "Nuestras Bromas y Momentos",
+    tag: "02 • Complicidad",
     message:
-      "Floto sin gravedad cada vez que me miras 🧸 No necesito planeta: contigo cualquier lugar es hogar 💖",
+      "Recuerdo cómo compartíamos tiempo, las risas, las bromas, las veces que ibas a mi casa... Poco a poco me hiciste cambiar de parecer y empecé a quererte con todo el corazón 💫",
     imageUrl: cosmos2,
     imageBlob: null,
     melody: "venus",
@@ -48,10 +48,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p3",
-    title: "Espiral Infinita",
-    tag: "03 · Espiral",
+    title: "Creer en lo Imposible",
+    tag: "03 • Destello",
     message:
-      "Mil millones de estrellas girando y ninguna se compara ✨ Te elegiría en cada vuelta de esta galaxia 💖",
+      "Una vez me preguntaste si te quería... Y siempre sigo aquí, porque contigo elegí creer en lo imposible y en la magia de quererte de verdad 💖",
     imageUrl: cosmos3,
     imageBlob: null,
     melody: "latido",
@@ -61,10 +61,10 @@ export const DEFAULT_PLATES: Plate[] = [
   },
   {
     id: "p4",
-    title: "Horizonte de Neón",
-    tag: "04 · Horizonte",
+    title: "Crear Nuestro Propio Destino",
+    tag: "04 • Constelación",
     message:
-      "Caminemos esta luz hasta donde no haya final 🧸 Yo llevo la música, tú llevas el brillo ✨💖",
+      "No soy de los que deja las cosas al azar. Yo prefiero trabajar en nuestro destino y mejorarlo, porque el destino se crea con lo que uno hace con amor 🪐✨",
     imageUrl: cosmos4,
     imageBlob: null,
     melody: "deriva",
@@ -72,9 +72,87 @@ export const DEFAULT_PLATES: Plate[] = [
     audioName: null,
     order: 3,
   },
+  {
+    id: "p5",
+    title: "Llegaste Sin Permiso",
+    tag: "05 • Magia Pura",
+    message:
+      "Te conocí cuando ni siquiera estaba buscando amor, pero la vida tiene sus propias formas de llegar... Al principio todo fue mágico: valía la pena arriesgar el aliento y las sonrisas 🌹",
+    imageUrl: cosmos1,
+    imageBlob: null,
+    melody: "cristal",
+    audioBlob: null,
+    audioName: null,
+    order: 4,
+  },
+  {
+    id: "p6",
+    title: "Una Huella Imborrable",
+    tag: "06 • Luz Estelar",
+    message:
+      "Llegaste a mi vida cuando menos lo esperaba y te convertiste en una de las personas más importantes para mí. Me hiciste volver a creer en algo bonito ✨💫",
+    imageUrl: cosmos2,
+    imageBlob: null,
+    melody: "nocturno",
+    audioBlob: null,
+    audioName: null,
+    order: 5,
+  },
+  {
+    id: "p7",
+    title: "Soñar a Tu Lado",
+    tag: "07 • Horizonte",
+    message:
+      "Durante un tiempo imaginé un futuro a tu lado y fui inmensamente feliz haciéndolo. Gracias por cada conversación y por cada recuerdo compartido en tranquilidad 🌌💖",
+    imageUrl: cosmos3,
+    imageBlob: null,
+    melody: "orbita",
+    audioBlob: null,
+    audioName: null,
+    order: 6,
+  },
+  {
+    id: "p8",
+    title: "Tus Ocurrencias y Detalles",
+    tag: "08 • Especial",
+    message:
+      "Tu forma de ser, nuestras charlas, tus ocurrencias y cada pequeño detalle que te hace única... todo eso tiene un lugar especial e imborrable en mi corazón 🧸✨",
+    imageUrl: cosmos4,
+    imageBlob: null,
+    melody: "latido",
+    audioBlob: null,
+    audioName: null,
+    order: 7,
+  },
+  {
+    id: "p9",
+    title: "La Historia Aún Sigue",
+    tag: "09 • Promesa",
+    message:
+      "Esto no es un adiós. Te quiero demasiado; estaré allí para ti siempre que me necesites, hasta el día en que ya no me necesites. No dudes en escribirme 💖",
+    imageUrl: cosmos1,
+    imageBlob: null,
+    melody: "venus",
+    audioBlob: null,
+    audioName: null,
+    order: 8,
+  },
+  {
+    id: "p10",
+    title: "Para: Nathalia Josefina 🧸✨",
+    tag: "10 • Deivis",
+    message:
+      "De todo corazón deseo que te vaya increíble en todo, que cumplas cada una de tus metas y que siempre tengas motivos para sonreír. ¡Pásala súper, peque! — Att: Deivis 💖",
+    imageUrl: cosmos2,
+    imageBlob: null,
+    melody: "cristal",
+    audioBlob: null,
+    audioName: null,
+    order: 9,
+  },
 ];
 
-const DB_NAME = "album-galaxia";
+const DB_NAME = "album-galaxia-v2";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

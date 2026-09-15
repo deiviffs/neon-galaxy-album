@@ -180,22 +180,24 @@ function Index() {
     return [...plates, ...plates];
   }, [plates]);
 
-  // Movimiento constante, suave, relajante e infinito hacia la izquierda
+  // Movimiento ultra fluido a 60/120fps basado en tiempo real (Lag-free)
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.55; // Velocidad suave y continua hacia la izquierda
+    let lastTime = performance.now();
+    const pxPerSecond = 28; // Velocidad suave, constante y relajante
 
-    const step = () => {
+    const step = (currentTime: number) => {
+      const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
+      lastTime = currentTime;
+
       const el = track.current;
       if (el && !isUserInteracting && !isDragging.current) {
         const maxLoop = el.scrollWidth / 2;
-        if (maxLoop > 0) {
-          if (el.scrollLeft >= maxLoop) {
-            el.scrollLeft -= maxLoop;
-          }
+        if (maxLoop > 0 && el.scrollLeft >= maxLoop) {
+          el.scrollLeft -= maxLoop;
         }
-        el.scrollLeft += speed;
+        el.scrollLeft += pxPerSecond * delta;
       }
       raf = requestAnimationFrame(step);
     };
@@ -204,7 +206,7 @@ function Index() {
     return () => cancelAnimationFrame(raf);
   }, [isUserInteracting, open, editing, looped.length, plates.length, isUnlocked]);
 
-  // Manejadores de arrastre fluidos y naturales
+  // Manejador táctil y de ratón ultra responsivo y sin lag para móviles
   const handlePointerDown = (e: React.PointerEvent) => {
     const el = track.current;
     if (!el) return;
@@ -218,9 +220,8 @@ function Index() {
     if (!isDragging.current) return;
     const el = track.current;
     if (!el) return;
-    e.preventDefault();
     const x = e.pageX - el.offsetLeft;
-    const walk = (x - startX.current) * 1.25;
+    const walk = (x - startX.current) * 1.0;
     let target = scrollLeftStart.current - walk;
     const maxLoop = el.scrollWidth / 2;
 
@@ -239,7 +240,7 @@ function Index() {
   const handlePointerUp = () => {
     if (isDragging.current) {
       isDragging.current = false;
-      pauseInteraction(1500);
+      pauseInteraction(1200);
     }
   };
 
@@ -438,7 +439,7 @@ function Index() {
                   marginTop: initialOffset,
                   animationDelay: `${(i % 5) * 0.4}s`,
                 }}
-                className={`group relative w-[75vw] max-w-sm shrink-0 overflow-hidden rounded-3xl border border-border/80 bg-card/90 shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:neon-ring ${floatClass}`}
+                className={`group relative w-[72vw] max-w-[22rem] shrink-0 overflow-hidden rounded-3xl border border-border/80 bg-[#16102a]/95 shadow-xl transition-transform duration-300 hover:scale-105 ${floatClass}`} style={{ willChange: "transform", contain: "layout paint" }}
               >
                 {/* Botón para abrir recuerdo y reproducir música */}
                 <button
@@ -549,12 +550,12 @@ function Index() {
                 {isMediaVideo(open, plateImageSrc(open, urlCache.current)) ? (
                   <video
                     src={plateImageSrc(open, urlCache.current)}
-                    controls
                     autoPlay
                     loop
+                    muted
                     playsInline
                     style={{ transform: open.rotation ? `rotate(${open.rotation}deg)` : undefined }}
-                    className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl"
+                    className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl pointer-events-none"
                   />
                 ) : (
                   <img

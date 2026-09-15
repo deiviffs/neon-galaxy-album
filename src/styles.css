@@ -129,28 +129,28 @@
 
 @keyframes float-gentle-1 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate3d(0, 0px, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(-24px) rotate(1.2deg);
+    transform: translate3d(0, -20px, 0) rotate(1deg);
   }
 }
 
 @keyframes float-gentle-2 {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translate3d(0, 0px, 0) rotate(0deg);
   }
   50% {
-    transform: translateY(22px) rotate(-1.4deg);
+    transform: translate3d(0, 18px, 0) rotate(-1deg);
   }
 }
 
 @keyframes float-gentle-3 {
   0%, 100% {
-    transform: translateY(-12px) rotate(0.8deg);
+    transform: translate3d(0, -10px, 0) rotate(0.8deg);
   }
   50% {
-    transform: translateY(16px) rotate(-1deg);
+    transform: translate3d(0, 14px, 0) rotate(-0.8deg);
   }
 }
 

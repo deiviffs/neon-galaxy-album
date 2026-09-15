@@ -234,6 +234,14 @@ class MusicEngine {
   }
 
   /** Reproduce el audio/canción específico de una tarjeta */
+  async playFile(url: string) {
+    return this.playCardFile(url);
+  }
+
+  async playMelody(key: string) {
+    return this.playCardMelody(key);
+  }
+
   async playCardFile(url: string) {
     this.pauseBackground();
     this.stopCardAudio();

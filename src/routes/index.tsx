@@ -108,6 +108,8 @@ function Index() {
           urlCache.current.set(key, url);
         }
         void musicEngine.playFile(url);
+      } else if (plate.audioUrl) {
+        void musicEngine.playFile(plate.audioUrl);
       } else {
         void musicEngine.playMelody(plate.melody);
       }

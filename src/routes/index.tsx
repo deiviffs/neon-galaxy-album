@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Álbum Galaxia Neón" },
       {
         property: "og:description",
-        content: "Nuestros mejores recuerdos flotando en la galaxia.",
+        content: "Recuerdos flotando en la galaxia cósmica.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -321,7 +321,7 @@ function Index() {
             Hola ✨
           </h1>
           <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Ingresa la contraseña para entrar a nuestra galaxia de recuerdos.
+            Ingresa la contraseña para acceder a la galaxia de recuerdos.
           </p>
 
           <form onSubmit={handleUnlock} className="mt-8 space-y-4">
@@ -380,7 +380,7 @@ function Index() {
             <Sparkles className="h-5 w-5 text-primary animate-pulse" />
           </div>
           <div>
-            <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Nuestra Galaxia de Recuerdos</h1>
+            <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Galaxia de Recuerdos</h1>
             <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita constante</p>
           </div>
         </div>

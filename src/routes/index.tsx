@@ -253,6 +253,7 @@ function Index() {
             <Plus className="h-8 w-8 text-primary" />
             <span className="font-display text-xs tracking-[0.3em] uppercase">Anexar imagen</span>
           </button>
+          )}
         </div>
       </section>
 

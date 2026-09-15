@@ -36,6 +36,35 @@ function Index() {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
   const urlCache = useRef(new Map<string, string>());
+  const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Intentar iniciar el audio de Interstellar en la primera interacción o carga
+  useEffect(() => {
+    const playBg = () => {
+      if (bgAudioRef.current && !muted && !openId) {
+        bgAudioRef.current.volume = 0.75;
+        bgAudioRef.current.play().catch(() => {});
+      }
+    };
+
+    playBg();
+
+    const unlock = () => {
+      playBg();
+    };
+
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("click", unlock, { once: true });
+    window.addEventListener("touchstart", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
+
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("click", unlock);
+      window.removeEventListener("touchstart", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, [muted, openId]);
   const track = useRef<HTMLDivElement>(null);
 
   // Arrastre con el mouse / touch
@@ -90,7 +119,11 @@ function Index() {
     setOpenId(null);
     setIsPlayingAudio(false);
     musicEngine.stop();
-  }, []);
+    if (bgAudioRef.current && !muted) {
+      bgAudioRef.current.volume = 0.75;
+      bgAudioRef.current.play().catch(() => {});
+    }
+  }, [muted]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
@@ -219,16 +252,31 @@ function Index() {
       setMuted(false);
       if (open) {
         playFor(open);
+      } else if (bgAudioRef.current) {
+        bgAudioRef.current.volume = 0.75;
+        bgAudioRef.current.play().catch(() => {});
       }
     } else {
       setMuted(true);
       setIsPlayingAudio(false);
       musicEngine.stop();
+      if (bgAudioRef.current) {
+        bgAudioRef.current.pause();
+      }
     }
   };
 
   return (
     <main className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden">
+      {/* Audio de Fondo: Interstellar Piano Solo (TikTok Slow Version) */}
+      <audio
+        ref={bgAudioRef}
+        src={interstellarAudioUrl}
+        loop
+        playsInline
+        preload="auto"
+      />
+
       {/* Fondo de estrellas animadas */}
       <div className="pointer-events-none absolute inset-0 starfield opacity-80" aria-hidden />
 
@@ -239,7 +287,7 @@ function Index() {
             <Sparkles className="h-5 w-5 text-primary animate-pulse" />
           </div>
           <div>
-            <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Álbum Cósmico</h1>
+            <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Nuestra Galaxia de Recuerdos</h1>
             <p className="text-[0.7rem] text-muted-foreground">{plates.length} recuerdos en órbita constante</p>
           </div>
         </div>

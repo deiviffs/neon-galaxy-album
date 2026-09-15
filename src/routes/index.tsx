@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
-import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, type Plate } from "@/lib/album";
+import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, DEFAULT_PLATES, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
 import interstellarAudioUrl from "@/assets/audio/interstellar-piano.mp3";
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [plates, setPlates] = useState<Plate[]>([]);
+  const [plates, setPlates] = useState<Plate[]>(DEFAULT_PLATES);
   const [openId, setOpenId] = useState<string | null>(null);
   const [editing, setEditing] = useState<{ plate: Plate; isNew: boolean } | null>(null);
   const [muted, setMuted] = useState(false);
@@ -434,7 +434,7 @@ function Index() {
                       </p>
                       <div className="mt-3 flex items-center gap-2 text-xs text-accent">
                         <Music className="h-3.5 w-3.5 animate-bounce" />
-                        <span className="truncate font-medium">{plate.audioName || "Canción Romántica"}</span>
+                        <span className="truncate font-semibold">{plate.audioName}</span>
                       </div>
                     </div>
                   </div>
@@ -540,11 +540,11 @@ function Index() {
                 </div>
 
                 <div className="text-left flex-1 min-w-0">
-                  <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase font-semibold">
-                    Canción del Recuerdo
+                  <p className="font-display text-[0.65rem] tracking-[0.2em] text-accent uppercase font-bold">
+                    Canción Asignada
                   </p>
-                  <p className="text-xs sm:text-sm font-bold text-foreground truncate max-w-[280px]" title={open.audioName || "Canción Romántica"}>
-                    {open.audioName || "Canción Romántica"}
+                  <p className="text-sm font-bold text-foreground truncate max-w-[280px]" title={open.audioName ?? ""}>
+                    {open.audioName}
                   </p>
                 </div>
 

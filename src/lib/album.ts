@@ -531,7 +531,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v15";
+const DB_NAME = "album-galaxia-v20";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -562,7 +562,7 @@ export async function resetToDefaultPlates(): Promise<Plate[]> {
 export async function loadPlates(): Promise<Plate[]> {
   try {
     try {
-      for (let i = 1; i <= 14; i++) {
+      for (let i = 1; i <= 19; i++) {
         indexedDB.deleteDatabase(i === 1 ? "album-galaxia" : `album-galaxia-v${i}`);
       }
     } catch {}
@@ -580,21 +580,18 @@ export async function loadPlates(): Promise<Plate[]> {
       return [...DEFAULT_PLATES];
     }
 
-    // Asegurar que todas las tarjetas tengan su nombre de canción y audioUrl actualizados
-    const merged = rows.map((r) => {
+    // Asegurar que siempre se tomen los nombres reales de las canciones y URLs de la carpeta
+    const fixedRows = rows.map((r) => {
       const def = DEFAULT_PLATES.find((d) => d.id === r.id);
-      if (def) {
-        return {
-          ...r,
-          audioUrl: r.audioUrl || def.audioUrl,
-          audioName: r.audioName || def.audioName,
-          rotation: r.rotation !== undefined ? r.rotation : (def.rotation || 0)
-        };
-      }
-      return r;
+      return {
+        ...r,
+        audioName: def?.audioName || r.audioName,
+        audioUrl: def?.audioUrl || r.audioUrl,
+        rotation: r.rotation !== undefined ? r.rotation : (def?.rotation || 0)
+      };
     });
 
-    return merged.sort((a, b) => a.order - b.order);
+    return fixedRows.sort((a, b) => a.order - b.order);
   } catch {
     return [...DEFAULT_PLATES];
   }

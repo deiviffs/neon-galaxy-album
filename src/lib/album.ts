@@ -27,6 +27,7 @@ import mem26 from "@/assets/memories/memory-26.mp4";
 import mem27 from "@/assets/memories/memory-27.mp4";
 import mem28 from "@/assets/memories/memory-28.mp4";
 import mem29 from "@/assets/memories/memory-29.mp4";
+import mem30 from "@/assets/memories/memory-30.jpeg";
 
 export type Plate = {
   id: string;
@@ -428,7 +429,7 @@ export const DEFAULT_PLATES: Plate[] = [
     title: "Siempre con Cariño",
     tag: "30 • Deivis",
     message: "De mi universo para el tuyo: gracias por haber formado parte de mi vida y dejar una huella tan linda. Att: Deivis 💖",
-    imageUrl: mem01,
+    imageUrl: mem30,
     imageBlob: null,
     isVideo: false,
     melody: "nocturno",
@@ -438,7 +439,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v6";
+const DB_NAME = "album-galaxia-v7";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

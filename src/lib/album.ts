@@ -363,8 +363,8 @@ export const DEFAULT_PLATES: Plate[] = [
     isVideo: true,
     rotation: 0,
     melody: "venus",
-    audioUrl: "/music/JVKE_-_Golden_Hour.mp3",
-    audioName: "JVKE - Golden Hour",
+    audioUrl: "/music/Jara_-_Dios_Te_Hizo_Perfecta.mp3",
+    audioName: "Jara - Dios Te Hizo Perfecta",
     audioBlob: null,
     audioName: null,
     order: 19,
@@ -379,8 +379,8 @@ export const DEFAULT_PLATES: Plate[] = [
     isVideo: false,
     rotation: 0,
     melody: "latido",
-    audioUrl: "/music/Lady_Gaga_Bruno_Mars_-_Die_With_A_Smile.mp3",
-    audioName: "Lady Gaga, Bruno Mars - Die With A Smile",
+    audioUrl: "/music/Jara_-_Adicto_a_Tu_Piel.mp3",
+    audioName: "Jara - Adicto a Tu Piel",
     audioBlob: null,
     audioName: null,
     order: 20,
@@ -531,7 +531,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v10";
+const DB_NAME = "album-galaxia-v11";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

@@ -34,17 +34,14 @@ export type Plate = {
   title: string;
   tag: string;
   message: string;
-  /** URL del recurso (imagen o video) */
   imageUrl: string | null;
   imageBlob: Blob | null;
   isVideo?: boolean;
-  rotation?: number; // 0, 90, 180, 270 grados
-  /** Melodía generada */
+  rotation?: number;
   melody: string;
-  /** Audio subido por la usuaria (tiene prioridad sobre la melodía) */
   audioUrl?: string | null;
-  audioBlob: Blob | null;
   audioName: string | null;
+  audioBlob: Blob | null;
   order: number;
 };
 
@@ -62,7 +59,6 @@ export const DEFAULT_PLATES: Plate[] = [
     audioUrl: "/music/3AM_-_Distancia.mp3",
     audioName: "3AM - Distancia",
     audioBlob: null,
-    audioName: null,
     order: 0,
   },
   {
@@ -74,11 +70,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "venus",
+    melody: "orbita",
     audioUrl: "/music/3AM_-_Por_Ti.mp3",
     audioName: "3AM - Por Ti",
     audioBlob: null,
-    audioName: null,
     order: 1,
   },
   {
@@ -90,11 +85,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "latido",
+    melody: "orbita",
     audioUrl: "/music/3AM_-_Una_Rosa.mp3",
     audioName: "3AM - Una Rosa",
     audioBlob: null,
-    audioName: null,
     order: 2,
   },
   {
@@ -106,11 +100,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "cristal",
+    melody: "orbita",
     audioUrl: "/music/3AM_-_Vidas_pasadas.mp3",
     audioName: "3AM - Vidas pasadas",
     audioBlob: null,
-    audioName: null,
     order: 3,
   },
   {
@@ -122,11 +115,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "deriva",
+    melody: "orbita",
     audioUrl: "/music/3AM_-_Vuela.mp3",
     audioName: "3AM - Vuela",
     audioBlob: null,
-    audioName: null,
     order: 4,
   },
   {
@@ -138,11 +130,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "nocturno",
+    melody: "orbita",
     audioUrl: "/music/3AM_Andrea_Ferrero_-_Quedate.mp3",
     audioName: "3AM Andrea Ferrero - Quedate",
     audioBlob: null,
-    audioName: null,
     order: 5,
   },
   {
@@ -158,7 +149,6 @@ export const DEFAULT_PLATES: Plate[] = [
     audioUrl: "/music/3AM_Micro_TDH_-_LA_CASA.mp3",
     audioName: "3AM, Micro TDH - LA CASA",
     audioBlob: null,
-    audioName: null,
     order: 6,
   },
   {
@@ -170,11 +160,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "venus",
+    melody: "orbita",
     audioUrl: "/music/Bruno_Mars_-_Lo_Arriesgo_Todo.mp3",
     audioName: "Bruno Mars - Lo Arriesgo Todo",
     audioBlob: null,
-    audioName: null,
     order: 7,
   },
   {
@@ -186,11 +175,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "latido",
+    melody: "orbita",
     audioUrl: "/music/Diciembre_Sin_Ti_-_Jarah.mp3",
     audioName: "Diciembre Sin Ti - Jarah",
     audioBlob: null,
-    audioName: null,
     order: 8,
   },
   {
@@ -202,11 +190,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "deriva",
+    melody: "orbita",
     audioUrl: "/music/Ed_Sheeran_-_Forever_My_Love.mp3",
     audioName: "Ed Sheeran - Forever My Love",
     audioBlob: null,
-    audioName: null,
     order: 9,
   },
   {
@@ -218,11 +205,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "cristal",
+    melody: "orbita",
     audioUrl: "/music/Ed_Sheeran_-_Photograph.mp3",
     audioName: "Ed Sheeran - Photograph",
     audioBlob: null,
-    audioName: null,
     order: 10,
   },
   {
@@ -234,11 +220,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "nocturno",
+    melody: "orbita",
     audioUrl: "/music/Elvis_Presley_Cant_Help_Falling_In_Love.mp3",
     audioName: "Elvis Presley — Can't Help Falling In Love",
     audioBlob: null,
-    audioName: null,
     order: 11,
   },
   {
@@ -254,7 +239,6 @@ export const DEFAULT_PLATES: Plate[] = [
     audioUrl: "/music/JVKE_-_Golden_Hour.mp3",
     audioName: "JVKE - Golden Hour",
     audioBlob: null,
-    audioName: null,
     order: 12,
   },
   {
@@ -266,11 +250,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "venus",
+    melody: "orbita",
     audioUrl: "/music/Lady_Gaga_Bruno_Mars_-_Die_With_A_Smile.mp3",
     audioName: "Lady Gaga, Bruno Mars - Die With A Smile",
     audioBlob: null,
-    audioName: null,
     order: 13,
   },
   {
@@ -282,11 +265,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "latido",
+    melody: "orbita",
     audioUrl: "/music/Olvdala_-_3AM_Beret.mp3",
     audioName: "Olvídala - 3AM, Beret",
     audioBlob: null,
-    audioName: null,
     order: 14,
   },
   {
@@ -298,11 +280,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "deriva",
+    melody: "orbita",
     audioUrl: "/music/Q_VUELTA_-_JARAH.mp3",
     audioName: "Q VUELTA - JARAH",
     audioBlob: null,
-    audioName: null,
     order: 15,
   },
   {
@@ -314,11 +295,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "cristal",
+    melody: "orbita",
     audioUrl: "/music/Sebastian_Yatra_-_Cristina.mp3",
     audioName: "Sebastian Yatra - Cristina",
     audioBlob: null,
-    audioName: null,
     order: 16,
   },
   {
@@ -330,11 +310,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "nocturno",
+    melody: "orbita",
     audioUrl: "/music/Sebastin_Yatra_-_Cmo_Mirarte.mp3",
     audioName: "Sebastián Yatra - Cómo Mirarte",
     audioBlob: null,
-    audioName: null,
     order: 17,
   },
   {
@@ -350,7 +329,6 @@ export const DEFAULT_PLATES: Plate[] = [
     audioUrl: "/music/Sebastin_Yatra_Augusto_Alonso_-_Lo_Que_Me_Pasa_Con_Vos.mp3",
     audioName: "Sebastián Yatra, Augusto Alonso - Lo Que Me Pasa Con Vos",
     audioBlob: null,
-    audioName: null,
     order: 18,
   },
   {
@@ -362,11 +340,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "venus",
+    melody: "orbita",
     audioUrl: "/music/Jara_-_Dios_Te_Hizo_Perfecta.mp3",
     audioName: "Jara - Dios Te Hizo Perfecta",
     audioBlob: null,
-    audioName: null,
     order: 19,
   },
   {
@@ -378,11 +355,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "latido",
+    melody: "orbita",
     audioUrl: "/music/Jara_-_Adicto_a_Tu_Piel.mp3",
     audioName: "Jara - Adicto a Tu Piel",
     audioBlob: null,
-    audioName: null,
     order: 20,
   },
   {
@@ -394,11 +370,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "deriva",
-    audioUrl: "/music/Ed_Sheeran_-_Photograph.mp3",
-    audioName: "Ed Sheeran - Photograph",
+    melody: "orbita",
+    audioUrl: "/music/JVKE_-_Golden_Hour.mp3",
+    audioName: "JVKE - Golden Hour",
     audioBlob: null,
-    audioName: null,
     order: 21,
   },
   {
@@ -410,11 +385,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "cristal",
-    audioUrl: "/music/Elvis_Presley_Cant_Help_Falling_In_Love.mp3",
-    audioName: "Elvis Presley — Can't Help Falling In Love",
+    melody: "orbita",
+    audioUrl: "/music/Ed_Sheeran_-_Photograph.mp3",
+    audioName: "Ed Sheeran - Photograph",
     audioBlob: null,
-    audioName: null,
     order: 22,
   },
   {
@@ -426,11 +400,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "nocturno",
-    audioUrl: "/music/Sebastian_Yatra_-_Cristina.mp3",
-    audioName: "Sebastian Yatra - Cristina",
+    melody: "orbita",
+    audioUrl: "/music/Elvis_Presley_Cant_Help_Falling_In_Love.mp3",
+    audioName: "Elvis Presley — Can't Help Falling In Love",
     audioBlob: null,
-    audioName: null,
     order: 23,
   },
   {
@@ -443,10 +416,9 @@ export const DEFAULT_PLATES: Plate[] = [
     isVideo: false,
     rotation: 0,
     melody: "orbita",
-    audioUrl: "/music/Sebastin_Yatra_-_Cmo_Mirarte.mp3",
-    audioName: "Sebastián Yatra - Cómo Mirarte",
+    audioUrl: "/music/Lady_Gaga_Bruno_Mars_-_Die_With_A_Smile.mp3",
+    audioName: "Lady Gaga, Bruno Mars - Die With A Smile",
     audioBlob: null,
-    audioName: null,
     order: 24,
   },
   {
@@ -458,11 +430,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "venus",
-    audioUrl: "/music/3AM_-_Por_Ti.mp3",
-    audioName: "3AM - Por Ti",
+    melody: "orbita",
+    audioUrl: "/music/Sebastian_Yatra_-_Cristina.mp3",
+    audioName: "Sebastian Yatra - Cristina",
     audioBlob: null,
-    audioName: null,
     order: 25,
   },
   {
@@ -474,11 +445,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "latido",
-    audioUrl: "/music/3AM_-_Una_Rosa.mp3",
-    audioName: "3AM - Una Rosa",
+    melody: "orbita",
+    audioUrl: "/music/Sebastin_Yatra_-_Cmo_Mirarte.mp3",
+    audioName: "Sebastián Yatra - Cómo Mirarte",
     audioBlob: null,
-    audioName: null,
     order: 26,
   },
   {
@@ -490,11 +460,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: true,
     rotation: 0,
-    melody: "deriva",
-    audioUrl: "/music/3AM_Andrea_Ferrero_-_Quedate.mp3",
-    audioName: "3AM Andrea Ferrero - Quedate",
+    melody: "orbita",
+    audioUrl: "/music/3AM_-_Por_Ti.mp3",
+    audioName: "3AM - Por Ti",
     audioBlob: null,
-    audioName: null,
     order: 27,
   },
   {
@@ -506,11 +475,10 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "cristal",
-    audioUrl: "/music/Bruno_Mars_-_Lo_Arriesgo_Todo.mp3",
-    audioName: "Bruno Mars - Lo Arriesgo Todo",
+    melody: "orbita",
+    audioUrl: "/music/3AM_-_Una_Rosa.mp3",
+    audioName: "3AM - Una Rosa",
     audioBlob: null,
-    audioName: null,
     order: 28,
   },
   {
@@ -522,16 +490,15 @@ export const DEFAULT_PLATES: Plate[] = [
     imageBlob: null,
     isVideo: false,
     rotation: 0,
-    melody: "nocturno",
-    audioUrl: "/music/Ed_Sheeran_-_Forever_My_Love.mp3",
-    audioName: "Ed Sheeran - Forever My Love",
+    melody: "orbita",
+    audioUrl: "/music/Jara_-_Dios_Te_Hizo_Perfecta.mp3",
+    audioName: "Jara - Dios Te Hizo Perfecta",
     audioBlob: null,
-    audioName: null,
     order: 29,
   }
 ];
 
-const DB_NAME = "album-galaxia-v25";
+const DB_NAME = "album-galaxia-v35";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -562,7 +529,7 @@ export async function resetToDefaultPlates(): Promise<Plate[]> {
 export async function loadPlates(): Promise<Plate[]> {
   try {
     try {
-      for (let i = 1; i <= 19; i++) {
+      for (let i = 1; i <= 34; i++) {
         indexedDB.deleteDatabase(i === 1 ? "album-galaxia" : `album-galaxia-v${i}`);
       }
     } catch {}
@@ -580,13 +547,13 @@ export async function loadPlates(): Promise<Plate[]> {
       return [...DEFAULT_PLATES];
     }
 
-    // Asegurar que siempre se tomen los nombres reales de las canciones y URLs de la carpeta
+    // Asegurar que cada recuerdo siempre conserve el nombre y URL real de su música
     const fixedRows = rows.map((r) => {
       const def = DEFAULT_PLATES.find((d) => d.id === r.id);
       return {
         ...r,
-        audioName: def?.audioName || r.audioName,
-        audioUrl: def?.audioUrl || r.audioUrl,
+        audioName: r.audioName || def?.audioName || null,
+        audioUrl: r.audioUrl || def?.audioUrl || null,
         rotation: r.rotation !== undefined ? r.rotation : (def?.rotation || 0)
       };
     });
@@ -628,9 +595,13 @@ export const plateImageSrc = (plate: Plate, urlCache: Map<string, string>): stri
   return plate.imageUrl ?? "";
 };
 
-export const isMediaVideo = (plate: Plate, src: string): boolean => {
-  if (plate.isVideo) return true;
-  if (plate.imageBlob?.type?.startsWith('video/')) return true;
-  if (src.endsWith('.mp4') || src.endsWith('.webm') || src.endsWith('.mov')) return true;
-  return false;
+export const isMediaVideo = (plate: Plate, url: string): boolean => {
+  if (plate.isVideo !== undefined) return plate.isVideo;
+  const target = (url || plate.imageUrl || "").toLowerCase();
+  return (
+    target.endsWith(".mp4") ||
+    target.endsWith(".webm") ||
+    target.includes("video/mp4") ||
+    target.includes(".mp4?")
+  );
 };

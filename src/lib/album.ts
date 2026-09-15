@@ -531,7 +531,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v20";
+const DB_NAME = "album-galaxia-v25";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

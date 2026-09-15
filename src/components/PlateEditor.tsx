@@ -161,59 +161,60 @@ export function PlateEditor({ plate, isNew, onSave, onDelete, onClose }: Props) 
           </div>
         </div>
 
-        {/* Selección de música */}
-        <p className="mt-6 font-display text-[0.65rem] tracking-[0.3em] text-accent uppercase">Música Cósmica</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {MELODIES.map((m) => {
-            const active = !draft.audioBlob && draft.melody === m.key;
-            return (
-              <button
-                key={m.key}
-                type="button"
-                onClick={() => {
-                  setDraft((d) => ({ ...d, melody: m.key, audioBlob: null, audioName: null }));
-                  void musicEngine.playMelody(m.key);
-                }}
-                className={`rounded-full border px-4 py-2 text-xs transition-all cursor-pointer ${
-                  active
-                    ? "border-primary bg-primary/25 text-foreground neon-ring font-semibold"
-                    : "border-border text-muted-foreground hover:text-foreground hover:bg-secondary/40"
-                }`}
-              >
-                {m.name}
-              </button>
-            );
-          })}
-        </div>
+        {/* Música del Recuerdo */}
+        <div className="mt-6 space-y-2">
+          <label className="block text-[0.7rem] font-display uppercase tracking-wider text-muted-foreground">
+            Música del Recuerdo
+          </label>
 
-        {/* Subida de canción personalizada */}
-        <button
-          type="button"
-          onClick={() => audioInput.current?.click()}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground hover:bg-secondary hover:border-primary/60 transition-all cursor-pointer shadow-sm"
-        >
-          <Music className="h-4 w-4 text-accent" />
-          {draft.audioName ? `Canción: ${draft.audioName}` : "Subir tu propia canción (mp3 / audio)"}
-        </button>
-        <input
-          ref={audioInput}
-          type="file"
-          accept="audio/*"
-          className="hidden"
-          onChange={(e) => {
-            const file = e.target.files?.[0];
-            if (file) setDraft((d) => ({ ...d, audioBlob: file, audioName: file.name }));
-          }}
-        />
-        {draft.audioName && (
-          <button
-            type="button"
-            onClick={() => setDraft((d) => ({ ...d, audioBlob: null, audioName: null }))}
-            className="mt-2 text-xs text-muted-foreground hover:text-foreground underline transition-colors cursor-pointer"
-          >
-            Quitar canción y volver a melodía ambiental
-          </button>
-        )}
+          {draft.audioName ? (
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-accent/40 bg-accent/10 p-3.5 shadow-sm">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-accent/20 text-accent">
+                  <Music className="h-4 w-4 animate-bounce" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[0.65rem] uppercase font-bold tracking-wider text-accent">
+                    Canción de la Carpeta
+                  </p>
+                  <p className="text-xs font-bold text-foreground truncate" title={draft.audioName}>
+                    {draft.audioName}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => audioInput.current?.click()}
+                className="shrink-0 rounded-xl border border-border bg-popover/80 px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary cursor-pointer"
+              >
+                Cambiar
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => audioInput.current?.click()}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border/80 bg-secondary/40 px-4 py-3 text-sm text-foreground hover:bg-secondary hover:border-primary/60 transition-all cursor-pointer shadow-sm"
+            >
+              <Music className="h-4 w-4 text-accent" />
+              <span>Seleccionar canción de tu carpeta (mp3)</span>
+            </button>
+          )}
+
+          <input
+            ref={audioInput}
+            type="file"
+            accept="audio/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const cleanName = file.name.replace(/\.mp3$/i, '');
+                setDraft((d) => ({ ...d, audioBlob: file, audioName: cleanName }));
+              }
+            }}
+          />
+        </div>
 
         {/* Botones de acción inferior */}
         <div className="mt-7 flex items-center gap-3">

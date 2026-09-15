@@ -91,11 +91,16 @@ function Index() {
     const clean = passwordInput.trim().toUpperCase();
     if (clean === "JOSEFINA") {
       setIsUnlocked(true);
+      setMuted(false);
       
-      // Start background Interstellar music immediately upon unlocking
-      if (bgAudioRef.current && !muted) {
+      // Reproducir inmediatamente el piano de Interstellar en el clic de desbloqueo
+      if (bgAudioRef.current) {
+        bgAudioRef.current.muted = false;
         bgAudioRef.current.volume = 0.75;
-        bgAudioRef.current.play().catch(() => {});
+        bgAudioRef.current.currentTime = 0;
+        bgAudioRef.current.play().catch((err) => {
+          console.warn("Audio autoplay blocked, waiting next interaction", err);
+        });
       }
     } else {
       setPasswordError(true);
@@ -179,7 +184,7 @@ function Index() {
   useEffect(() => {
     if (open || editing || looped.length < 2) return;
     let raf = 0;
-    const speed = 0.45; // Velocidad pausada, suave y relajante
+    const speed = 0.55; // Velocidad suave y continua hacia la izquierda
 
     const step = () => {
       const el = track.current;
@@ -197,7 +202,7 @@ function Index() {
 
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [isUserInteracting, open, editing, looped.length, plates.length]);
+  }, [isUserInteracting, open, editing, looped.length, plates.length, isUnlocked]);
 
   // Manejadores de arrastre fluidos y naturales
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -296,71 +301,58 @@ function Index() {
   };
 
 
-  if (!isUnlocked) {
-    return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center cosmos-bg select-none overflow-hidden px-4">
-        {/* Fondo de estrellas */}
-        <div className="pointer-events-none absolute inset-0 starfield opacity-90" aria-hidden />
-
-        {/* Audio de Fondo listo para sonar */}
-        <audio
-          ref={bgAudioRef}
-          src={interstellarAudioUrl}
-          loop
-          playsInline
-          preload="auto"
-        />
-
-        {/* Tarjeta de Inicio de Sesión Cósmica */}
-        <div className="relative z-10 w-full max-w-md rounded-3xl border border-border/80 bg-popover/90 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl neon-ring text-center animate-in zoom-in-95 duration-500">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-primary/20 text-accent neon-ring shadow-lg mb-6">
-            <Sparkles className="h-8 w-8 animate-pulse text-accent" />
-          </div>
-
-          <h1 className="font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl drop-shadow-md">
-            Hola ✨
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-            Ingresa la contraseña para acceder a la galaxia de recuerdos.
-          </p>
-
-          <form onSubmit={handleUnlock} className="mt-8 space-y-4">
-            <div className="relative">
-              <input
-                type="password"
-                autoFocus
-                value={passwordInput}
-                onChange={(e) => {
-                  setPasswordInput(e.target.value);
-                  if (passwordError) setPasswordError(false);
-                }}
-                placeholder="Escribe la contraseña..."
-                className={`w-full rounded-2xl border bg-secondary/50 px-5 py-4 text-center text-base tracking-widest text-foreground placeholder:text-muted-foreground/60 outline-none transition-all focus:border-primary focus:neon-ring shadow-inner ${
-                  passwordError ? "border-destructive animate-shake" : "border-border/80"
-                }`}
-              />
-            </div>
-
-            {passwordError && (
-              <p className="text-xs text-destructive animate-in fade-in duration-200">
-                Contraseña incorrecta... Pista: Tu nombre 🌹
-              </p>
-            )}
-
-            <button
-              type="submit"
-              className="w-full rounded-2xl bg-gradient-to-r from-primary to-accent py-4 text-sm font-bold tracking-wider text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-            >
-              Entrar a la Galaxia ✨
-            </button>
-          </form>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="relative flex min-h-screen flex-col cosmos-bg select-none overflow-hidden">
+      {/* Overlay de Inicio de Sesión con Contraseña (JOSEFINA) */}
+      {!isUnlocked && (
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background/95 p-4 backdrop-blur-3xl animate-in fade-in duration-300">
+          <div className="pointer-events-none absolute inset-0 starfield opacity-90" aria-hidden />
+
+          <div className="relative z-10 w-full max-w-md rounded-3xl border border-border/80 bg-popover/90 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl neon-ring text-center animate-in zoom-in-95 duration-300">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-primary/20 text-accent neon-ring shadow-lg mb-6">
+              <Sparkles className="h-8 w-8 animate-pulse text-accent" />
+            </div>
+
+            <h1 className="font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl drop-shadow-md">
+              Hola ✨
+            </h1>
+            <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+              Ingresa la contraseña para acceder a la galaxia de recuerdos.
+            </p>
+
+            <form onSubmit={handleUnlock} className="mt-8 space-y-4">
+              <div className="relative">
+                <input
+                  type="password"
+                  autoFocus
+                  value={passwordInput}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                    if (passwordError) setPasswordError(false);
+                  }}
+                  placeholder="Escribe la contraseña..."
+                  className={`w-full rounded-2xl border bg-secondary/50 px-5 py-4 text-center text-base tracking-widest text-foreground placeholder:text-muted-foreground/60 outline-none transition-all focus:border-primary focus:neon-ring shadow-inner ${
+                    passwordError ? "border-destructive animate-shake" : "border-border/80"
+                  }`}
+                />
+              </div>
+
+              {passwordError && (
+                <p className="text-xs text-destructive animate-in fade-in duration-200">
+                  Contraseña incorrecta... Pista: Tu segundo nombre 🌹
+                </p>
+              )}
+
+              <button
+                type="submit"
+                className="w-full rounded-2xl bg-gradient-to-r from-primary to-accent py-4 text-sm font-bold tracking-wider text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              >
+                Entrar a la Galaxia ✨
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
       {/* Audio de Fondo: Interstellar Piano Solo (TikTok Slow Version) */}
       <audio
         ref={bgAudioRef}

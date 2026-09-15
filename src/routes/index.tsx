@@ -32,6 +32,7 @@ function Index() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [editing, setEditing] = useState<{ plate: Plate; isNew: boolean } | null>(null);
   const [muted, setMuted] = useState(false);
+  const [paused, setPaused] = useState(false);
   const urlCache = useRef(new Map<string, string>());
   const track = useRef<HTMLDivElement>(null);
 
@@ -74,8 +75,26 @@ function Index() {
   const scrollBy = (dir: -1 | 1) => {
     const el = track.current;
     if (!el) return;
+    setPaused(true);
     el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+    window.setTimeout(() => setPaused(false), 2500);
   };
+
+  // Deriva automática y suave hacia la izquierda (scroll infinito)
+  useEffect(() => {
+    if (paused || open || editing || plates.length < 2) return;
+    let raf = 0;
+    const step = () => {
+      const el = track.current;
+      if (el) {
+        const max = el.scrollWidth - el.clientWidth;
+        el.scrollLeft = max > 0 && el.scrollLeft >= max - 1 ? 0 : el.scrollLeft + 0.45;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [paused, open, editing, plates.length]);
 
   const handleSave = async (plate: Plate) => {
     urlCache.current.delete(`img-${plate.id}`);
@@ -162,12 +181,16 @@ function Index() {
 
         <div
           ref={track}
-          className="flex w-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-6 py-10 sm:px-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          onPointerDown={() => setPaused(true)}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          className="flex w-full items-center gap-6 overflow-x-auto px-6 py-16 sm:px-16 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {plates.map((plate, i) => (
             <article
               key={plate.id}
-              className="group relative w-[80vw] max-w-sm shrink-0 snap-center overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:-translate-y-1 hover:neon-ring"
+              style={{ transform: `translateY(${i % 2 === 0 ? "2.5rem" : "-2.5rem"})` }}
+              className="group relative w-[70vw] max-w-sm shrink-0 overflow-hidden rounded-3xl border border-border bg-card transition-all duration-500 hover:neon-ring"
             >
               <button
                 type="button"
@@ -219,7 +242,8 @@ function Index() {
           <button
             type="button"
             onClick={addNew}
-            className="flex h-[24rem] w-[60vw] max-w-xs shrink-0 snap-center flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground sm:h-[30rem]"
+            style={{ transform: `translateY(${plates.length % 2 === 0 ? "2.5rem" : "-2.5rem"})` }}
+            className="flex h-[24rem] w-[60vw] max-w-xs shrink-0 flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-border text-muted-foreground transition-colors hover:border-primary hover:text-foreground sm:h-[30rem]"
           >
             <Plus className="h-8 w-8 text-primary" />
             <span className="font-display text-xs tracking-[0.3em] uppercase">Anexar imagen</span>

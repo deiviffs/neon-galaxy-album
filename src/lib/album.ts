@@ -27,7 +27,7 @@ import mem26 from "@/assets/memories/memory-26.mp4";
 import mem27 from "@/assets/memories/memory-27.mp4";
 import mem28 from "@/assets/memories/memory-28.mp4";
 import mem29 from "@/assets/memories/memory-29.mp4";
-import mem30 from "@/assets/memories/memory-30.jpeg";
+import mem30 from "@/assets/memories/memory-30.png";
 
 export type Plate = {
   id: string;
@@ -38,6 +38,7 @@ export type Plate = {
   imageUrl: string | null;
   imageBlob: Blob | null;
   isVideo?: boolean;
+  rotation?: number; // 0, 90, 180, 270 grados
   /** Melodía generada */
   melody: string;
   /** Audio subido por la usuaria (tiene prioridad sobre la melodía) */
@@ -55,6 +56,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem01,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -68,6 +70,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem15,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -81,6 +84,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem02,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -94,6 +98,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem23,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -107,6 +112,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem03,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -120,6 +126,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem04,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -133,6 +140,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem05,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -146,6 +154,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem24,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -159,6 +168,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem06,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -172,6 +182,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem07,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -185,6 +196,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem08,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -198,6 +210,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem25,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -211,6 +224,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem09,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -224,6 +238,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem16,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -237,6 +252,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem10,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -250,6 +266,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem26,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -263,6 +280,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem11,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -276,6 +294,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem12,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -289,6 +308,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem13,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -302,6 +322,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem27,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -315,6 +336,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem14,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -328,6 +350,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem18,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -341,6 +364,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem19,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -354,6 +378,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem28,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -367,6 +392,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem20,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "orbita",
     audioBlob: null,
     audioName: null,
@@ -380,6 +406,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem17,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "venus",
     audioBlob: null,
     audioName: null,
@@ -393,6 +420,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem21,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "latido",
     audioBlob: null,
     audioName: null,
@@ -406,6 +434,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem29,
     imageBlob: null,
     isVideo: true,
+    rotation: 0,
     melody: "deriva",
     audioBlob: null,
     audioName: null,
@@ -419,6 +448,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem22,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "cristal",
     audioBlob: null,
     audioName: null,
@@ -432,6 +462,7 @@ export const DEFAULT_PLATES: Plate[] = [
     imageUrl: mem30,
     imageBlob: null,
     isVideo: false,
+    rotation: 0,
     melody: "nocturno",
     audioBlob: null,
     audioName: null,
@@ -439,7 +470,7 @@ export const DEFAULT_PLATES: Plate[] = [
   }
 ];
 
-const DB_NAME = "album-galaxia-v8";
+const DB_NAME = "album-galaxia-v9";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
@@ -470,13 +501,9 @@ export async function resetToDefaultPlates(): Promise<Plate[]> {
 export async function loadPlates(): Promise<Plate[]> {
   try {
     try {
-      indexedDB.deleteDatabase("album-galaxia");
-      indexedDB.deleteDatabase("album-galaxia-v2");
-      indexedDB.deleteDatabase("album-galaxia-v3");
-      indexedDB.deleteDatabase("album-galaxia-v4");
-      indexedDB.deleteDatabase("album-galaxia-v5");
-      indexedDB.deleteDatabase("album-galaxia-v6");
-      indexedDB.deleteDatabase("album-galaxia-v7");
+      for (let i = 1; i <= 8; i++) {
+        indexedDB.deleteDatabase(i === 1 ? "album-galaxia" : `album-galaxia-v${i}`);
+      }
     } catch {}
 
     const db = await openDb();

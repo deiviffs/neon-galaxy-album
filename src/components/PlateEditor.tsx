@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Camera, Image as ImageIcon, Music, RefreshCw, Trash2, Upload, X } from "lucide-react";
+import { Camera, Film, Image as ImageIcon, Music, RefreshCw, RotateCw, Trash2, Upload, X } from "lucide-react";
 import { MELODIES } from "@/lib/melodies";
-import type { Plate } from "@/lib/album";
+import { isMediaVideo, type Plate } from "@/lib/album";
 import { musicEngine } from "@/lib/musicEngine";
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 export function PlateEditor({ plate, isNew, onSave, onDelete, onClose }: Props) {
   const [draft, setDraft] = useState<Plate>(plate);
   const [preview, setPreview] = useState<string>("");
-  const imgInput = useRef<HTMLInputElement>(null);
+  const mediaInput = useRef<HTMLInputElement>(null);
   const audioInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -27,6 +27,9 @@ export function PlateEditor({ plate, isNew, onSave, onDelete, onClose }: Props) 
     setPreview(draft.imageUrl ?? "");
     return;
   }, [draft.imageBlob, draft.imageUrl]);
+
+  const isVid = isMediaVideo(draft, preview);
+  const rotation = draft.rotation ?? 0;
 
   const field =
     "w-full rounded-xl border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:border-primary transition-colors";
@@ -48,53 +51,81 @@ export function PlateEditor({ plate, isNew, onSave, onDelete, onClose }: Props) 
           </button>
         </div>
 
-        {/* Contenedor de la Imagen con Badge siempre visible */}
+        {/* Contenedor de la Imagen/Video */}
         <div className="mt-5 space-y-2.5">
           <div
-            onClick={() => imgInput.current?.click()}
-            className="group relative block h-56 w-full overflow-hidden rounded-2xl border-2 border-dashed border-border/80 bg-secondary/40 cursor-pointer shadow-inner transition-all hover:border-primary"
+            onClick={() => mediaInput.current?.click()}
+            className="group relative block h-64 w-full overflow-hidden rounded-2xl border-2 border-dashed border-border/80 bg-secondary/40 cursor-pointer shadow-inner transition-all hover:border-primary"
           >
             {preview ? (
-              <img src={preview} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              isVid ? (
+                <video
+                  src={preview}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  style={{ transform: rotation ? `rotate(${rotation}deg)` : undefined }}
+                  className="h-full w-full object-contain transition-transform duration-300"
+                />
+              ) : (
+                <img
+                  src={preview}
+                  alt=""
+                  style={{ transform: rotation ? `rotate(${rotation}deg)` : undefined }}
+                  className="h-full w-full object-contain transition-transform duration-300"
+                />
+              )
             ) : (
               <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground">
                 <ImageIcon className="h-8 w-8 text-primary/70" />
-                <span className="text-xs">Sin imagen seleccionada</span>
+                <span className="text-xs">Sin archivo seleccionado</span>
               </div>
             )}
 
-            {/* Overlay interactivo */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/50 backdrop-blur-xs opacity-0 transition-opacity group-hover:opacity-100">
-              <span className="flex items-center gap-2 rounded-full bg-primary/90 px-4 py-2 text-xs font-bold text-primary-foreground shadow-lg">
-                <Camera className="h-4 w-4" /> Seleccionar otra foto
-              </span>
-            </div>
-
-            {/* Badge permanente en la esquina de la imagen para móviles */}
+            {/* Badge permanente en la esquina para móviles */}
             <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-full border border-border/80 bg-popover/90 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur-md shadow-md">
               <Camera className="h-3.5 w-3.5 text-accent" />
               <span>Cambiar</span>
             </div>
           </div>
 
-          {/* Botón directo visible debajo de la imagen */}
-          <button
-            type="button"
-            onClick={() => imgInput.current?.click()}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-secondary/50 px-4 py-2.5 text-xs font-medium text-foreground hover:bg-secondary hover:border-primary/60 transition-all cursor-pointer shadow-sm"
-          >
-            <Upload className="h-4 w-4 text-accent" />
-            <span>Subir o cambiar imagen desde tu dispositivo</span>
-          </button>
+          {/* Botones de acción de medios: Subir y Rotar */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => mediaInput.current?.click()}
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl border border-border bg-secondary/50 px-4 py-2.5 text-xs font-medium text-foreground hover:bg-secondary hover:border-primary/60 transition-all cursor-pointer shadow-sm"
+            >
+              <Upload className="h-4 w-4 text-accent" />
+              <span>Subir foto o video</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setDraft(d => ({ ...d, rotation: ((d.rotation ?? 0) + 90) % 360 }))}
+              title="Rotar imagen/video 90 grados"
+              className="flex items-center justify-center gap-1.5 rounded-xl border border-border bg-secondary/50 px-3.5 py-2.5 text-xs font-medium text-foreground hover:bg-secondary hover:border-primary/60 transition-all cursor-pointer shadow-sm"
+            >
+              <RotateCw className="h-4 w-4 text-primary" />
+              <span>Rotar {rotation > 0 ? `(${rotation}°)` : ''}</span>
+            </button>
+          </div>
 
           <input
-            ref={imgInput}
+            ref={mediaInput}
             type="file"
-            accept="image/*"
+            accept="image/*,video/*"
             className="hidden"
             onChange={(e) => {
               const file = e.target.files?.[0];
-              if (file) setDraft((d) => ({ ...d, imageBlob: file, imageUrl: null }));
+              if (file) {
+                setDraft((d) => ({
+                  ...d,
+                  imageBlob: file,
+                  imageUrl: null,
+                  isVideo: file.type.startsWith('video/'),
+                }));
+              }
             }}
           />
         </div>

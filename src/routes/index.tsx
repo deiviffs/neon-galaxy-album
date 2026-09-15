@@ -204,6 +204,7 @@ function Index() {
         melody: "cristal",
         audioBlob: null,
         audioName: null,
+        rotation: 0,
         order: plates.length,
       },
     });
@@ -307,6 +308,7 @@ function Index() {
             const initialOffset = i % 2 === 0 ? "1.5rem" : "-1.5rem";
             const mediaSrc = plateImageSrc(plate, urlCache.current);
             const isVid = isMediaVideo(plate, mediaSrc);
+            const rot = plate.rotation ?? 0;
 
             return (
               <div
@@ -335,6 +337,7 @@ function Index() {
                           loop
                           muted
                           playsInline
+                          style={{ transform: rot ? `rotate(${rot}deg)` : undefined }}
                           className="h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-[28rem]"
                         />
                       ) : (
@@ -342,6 +345,7 @@ function Index() {
                           src={mediaSrc}
                           alt={plate.title}
                           loading={i < 4 ? "eager" : "lazy"}
+                          style={{ transform: rot ? `rotate(${rot}deg)` : undefined }}
                           className="h-[24rem] w-full object-cover transition-transform duration-700 group-hover:scale-110 sm:h-[28rem]"
                         />
                       )
@@ -439,12 +443,14 @@ function Index() {
                     autoPlay
                     loop
                     playsInline
+                    style={{ transform: open.rotation ? `rotate(${open.rotation}deg)` : undefined }}
                     className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl"
                   />
                 ) : (
                   <img
                     src={plateImageSrc(open, urlCache.current)}
                     alt={open.title}
+                    style={{ transform: open.rotation ? `rotate(${open.rotation}deg)` : undefined }}
                     className="mx-auto max-h-[50vh] w-full object-contain rounded-2xl"
                   />
                 )}

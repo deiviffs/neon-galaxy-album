@@ -1,192 +1,301 @@
-import React, { useState, useEffect } from "react";
-import { Sparkles, Heart, Sun, Play, RotateCcw, X } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { X, RotateCcw } from "lucide-react";
 
 interface SunflowerInteractiveProps {
   onClose?: () => void;
 }
 
+interface TreeBranch {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  width: number;
+  delay: number;
+}
+
+interface TreeFlower {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  delay: number;
+}
+
 export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
-  const [phase, setPhase] = useState<"intro" | "blooming" | "poem">("intro");
-  const [bloomedPetals, setBloomedPetals] = useState<number>(0);
-  const [sparks, setSparks] = useState<{ id: number; x: number; y: number; size: number; delay: number }[]>([]);
-  const totalPetals = 24;
+  const [clickedInitial, setClickedInitial] = useState(false);
+  const [stage, setStage] = useState<"initial" | "growing-trunk" | "growing-branches" | "flowers" | "shift-and-text" | "completed">("initial");
+  const [typedText, setTypedText] = useState("");
+  const [isTypingDone, setIsTypingDone] = useState(false);
+  const [flowers, setFlowers] = useState<TreeFlower[]>([]);
+  const [branches, setBranches] = useState<TreeBranch[]>([]);
+  const [fallingPetals, setFallingPetals] = useState<{ id: number; x: number; y: number; delay: number }[]>([]);
+  
+  const fullText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
+  const footerText = "Eres el sol que hace florecer cada uno de mis días.";
 
   useEffect(() => {
-    const items = Array.from({ length: 35 }).map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 4 + 2,
-      delay: Math.random() * 4,
+    // 1. Tronco y ramas
+    const branchList: TreeBranch[] = [
+      { x1: 200, y1: 340, x2: 200, y2: 230, width: 14, delay: 0 },
+      { x1: 200, y1: 250, x2: 150, y2: 180, width: 9, delay: 400 },
+      { x1: 200, y1: 240, x2: 250, y2: 175, width: 9, delay: 450 },
+      { x1: 150, y1: 180, x2: 110, y2: 130, width: 6, delay: 800 },
+      { x1: 150, y1: 180, x2: 170, y2: 120, width: 5, delay: 850 },
+      { x1: 250, y1: 175, x2: 290, y2: 125, width: 6, delay: 900 },
+      { x1: 250, y1: 175, x2: 230, y2: 115, width: 5, delay: 950 },
+      { x1: 200, y1: 210, x2: 195, y2: 135, width: 6, delay: 700 },
+      { x1: 110, y1: 130, x2: 80, y2: 95, width: 4, delay: 1200 },
+      { x1: 290, y1: 125, x2: 320, y2: 90, width: 4, delay: 1250 },
+    ];
+    setBranches(branchList);
+
+    // 2. Coordenadas matemáticas de corazón para distribuir los girasoles
+    const flowerList: TreeFlower[] = [];
+    let id = 0;
+    
+    const totalPoints = 110;
+    for (let i = 0; i < totalPoints; i++) {
+      const t = (Math.PI * 2 * i) / totalPoints;
+      const hx = 16 * Math.pow(Math.sin(t), 3);
+      const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+      
+      const scale = 7.5;
+      const x = 200 + hx * scale + (Math.random() * 8 - 4);
+      const y = 135 + hy * scale + (Math.random() * 8 - 4);
+      const size = 16 + Math.random() * 8;
+      const delay = (i / totalPoints) * 1200 + Math.random() * 300;
+
+      flowerList.push({ id: id++, x, y, size, delay });
+    }
+
+    // Relleno interno
+    for (let layer = 0.25; layer <= 0.85; layer += 0.18) {
+      const innerCount = Math.floor(totalPoints * layer * 0.7);
+      for (let j = 0; j < innerCount; j++) {
+        const t = (Math.PI * 2 * j) / innerCount;
+        const hx = 16 * Math.pow(Math.sin(t), 3) * layer;
+        const hy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * layer;
+        
+        const scale = 7.5;
+        const x = 200 + hx * scale + (Math.random() * 10 - 5);
+        const y = 135 + hy * scale + (Math.random() * 10 - 5);
+        const size = 15 + Math.random() * 9;
+        const delay = 600 + Math.random() * 1000;
+
+        flowerList.push({ id: id++, x, y, size, delay });
+      }
+    }
+
+    setFlowers(flowerList);
+
+    const petals = Array.from({ length: 6 }).map((_, pi) => ({
+      id: pi,
+      x: 140 - pi * 18 + Math.random() * 10,
+      y: 190 + pi * 24 + Math.random() * 10,
+      delay: 2000 + pi * 400,
     }));
-    setSparks(items);
+    setFallingPetals(petals);
   }, []);
 
-  useEffect(() => {
-    if (phase === "blooming") {
-      const interval = setInterval(() => {
-        setBloomedPetals((prev) => {
-          if (prev < totalPetals) {
-            return prev + 1;
-          } else {
-            clearInterval(interval);
-            setTimeout(() => setPhase("poem"), 800);
-            return prev;
-          }
-        });
-      }, 70);
-      return () => clearInterval(interval);
-    }
-  }, [phase]);
+  const handleStartAnimation = () => {
+    if (clickedInitial) return;
+    setClickedInitial(true);
+    
+    setStage("growing-trunk");
+    setTimeout(() => {
+      setStage("growing-branches");
+    }, 600);
 
-  const handleStartBlooming = () => {
-    setPhase("blooming");
-    setBloomedPetals(0);
+    setTimeout(() => {
+      setStage("flowers");
+    }, 1400);
+
+    setTimeout(() => {
+      setStage("shift-and-text");
+    }, 3000);
   };
 
+  useEffect(() => {
+    if (stage === "shift-and-text" || stage === "completed") {
+      let currentIdx = 0;
+      setTypedText("");
+      setIsTypingDone(false);
+
+      const interval = setInterval(() => {
+        if (currentIdx < fullText.length) {
+          setTypedText(fullText.slice(0, currentIdx + 1));
+          currentIdx++;
+        } else {
+          setIsTypingDone(true);
+          setStage("completed");
+          clearInterval(interval);
+        }
+      }, 38);
+
+      return () => clearInterval(interval);
+    }
+  }, [stage]);
+
   const handleReset = () => {
-    setPhase("intro");
-    setBloomedPetals(0);
+    setClickedInitial(false);
+    setStage("initial");
+    setTypedText("");
+    setIsTypingDone(false);
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[580px] w-full max-w-2xl mx-auto p-6 overflow-hidden rounded-3xl bg-gradient-to-b from-[#140e2b]/95 via-[#1a1138]/95 to-[#0b0817]/95 border border-amber-500/30 shadow-[0_0_50px_rgba(245,158,11,0.25)] backdrop-blur-2xl text-foreground select-none">
+    <div className="relative flex flex-col items-center justify-center min-h-[620px] w-full max-w-4xl mx-auto p-4 sm:p-8 overflow-hidden rounded-3xl bg-[#f6f5ef] border border-stone-300 shadow-2xl text-stone-900 select-none font-serif">
       {onClose && (
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-black/40 border border-white/10 text-white/80 hover:text-white hover:bg-black/60 transition-all cursor-pointer"
+          className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-stone-200/80 border border-stone-300 text-stone-700 hover:text-stone-950 hover:bg-stone-300 transition-all cursor-pointer shadow-sm"
           title="Cerrar"
         >
           <X className="w-5 h-5" />
         </button>
       )}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl pointer-events-none" />
-      {sparks.map((s) => (
-        <div
-          key={s.id}
-          className="absolute rounded-full bg-amber-300 pointer-events-none animate-pulse"
-          style={{
-            left: `${s.x}%`,
-            top: `${s.y}%`,
-            width: `${s.size}px`,
-            height: `${s.size}px`,
-            animationDuration: `${2 + (s.delay % 3)}s`,
-            animationDelay: `${s.delay}s`,
-            opacity: 0.6,
-            boxShadow: "0 0 10px #f59e0b",
-          }}
-        />
-      ))}
-      <div className="text-center z-10 mb-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-widest mb-2 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
-          <Sun className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: "10s" }} />
-          <span>Recuerdo Especial #31</span>
-          <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-        </div>
-        <h2 className="text-2xl sm:text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 drop-shadow-[0_2px_10px_rgba(245,158,11,0.4)]">
-          Un Girasol Que Brilla Para Ti
-        </h2>
-      </div>
-      <div className="relative my-4 flex items-center justify-center w-64 h-64 sm:w-72 sm:h-72">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-28 bg-gradient-to-t from-emerald-800 to-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)] z-0 origin-bottom">
-          <div className="absolute top-8 -left-7 w-8 h-4 bg-emerald-600 rounded-full -rotate-30 border border-emerald-400/30 shadow-md" />
-          <div className="absolute top-14 -right-7 w-8 h-4 bg-emerald-600 rounded-full rotate-30 border border-emerald-400/30 shadow-md" />
-        </div>
-        <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center z-10">
-          <div className="absolute inset-0 m-auto w-32 h-32 rounded-full bg-amber-400/20 blur-xl animate-pulse pointer-events-none" />
-          {Array.from({ length: totalPetals }).map((_, i) => {
-            const angle = (360 / totalPetals) * i;
-            const isBloomed = phase === "intro" ? true : i < bloomedPetals;
-            const scale = phase === "intro" ? 0.9 : isBloomed ? 1 : 0;
-            return (
-              <div
-                key={i}
-                className="absolute top-1/2 left-1/2 w-6 sm:w-7 h-20 sm:h-24 origin-bottom transition-all duration-500 ease-out pointer-events-none"
-                style={{
-                  transform: `translate(-50%, -100%) rotate(${angle}deg) scale(${scale})`,
-                  opacity: isBloomed ? 1 : 0,
-                  transitionDelay: phase === "blooming" ? `${i * 30}ms` : "0ms",
-                }}
-              >
-                <div className="w-full h-full rounded-t-full bg-gradient-to-t from-amber-500 via-yellow-400 to-amber-200 border-t border-amber-100 shadow-[0_0_12px_rgba(245,158,11,0.5)]" />
-              </div>
-            );
-          })}
+
+      {!clickedInitial ? (
+        <div className="flex flex-col items-center justify-center py-16 animate-in fade-in duration-500">
           <div
-            onClick={phase === "intro" ? handleStartBlooming : undefined}
-            className={`relative z-20 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[#451a03] via-[#78350f] to-[#271003] border-4 border-amber-600/80 shadow-[inset_0_0_15px_rgba(0,0,0,0.8),0_0_25px_rgba(245,158,11,0.5)] flex flex-col items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 active:scale-95 ${
-              phase === "intro" ? "animate-bounce" : ""
-            }`}
+            onClick={handleStartAnimation}
+            className="group relative flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
           >
-            <div className="absolute inset-2 rounded-full border border-dashed border-amber-400/30 opacity-70" />
-            <div className="absolute inset-4 rounded-full border border-dotted border-amber-300/40 opacity-50" />
-            {phase === "intro" ? (
-              <div className="flex flex-col items-center text-center p-1 pointer-events-none">
-                <Sparkles className="w-6 h-6 text-yellow-300 animate-spin" style={{ animationDuration: "6s" }} />
-                <span className="text-[10px] font-bold text-amber-100 uppercase tracking-tighter mt-0.5">
-                  ¡Tócame!
-                </span>
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute top-1/2 left-1/2 w-5 sm:w-6 h-20 sm:h-24 origin-bottom -translate-x-1/2 -translate-y-full"
+                  style={{ transform: `translate(-50%, -100%) rotate(${i * 15}deg)` }}
+                >
+                  <div className="w-full h-full rounded-t-full bg-gradient-to-t from-[#f59e0b] via-[#fbbf24] to-[#fde68a] border-t border-amber-200 shadow-sm" />
+                </div>
+              ))}
+              <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#381e09] border-2 border-[#59300e] shadow-inner flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full border border-dashed border-amber-600/40" />
               </div>
-            ) : (
-              <Heart className="w-8 h-8 text-amber-400 fill-amber-400/80 animate-pulse" />
+            </div>
+
+            <div className="absolute top-1/2 -right-24 -translate-y-1/2 flex items-center gap-2 font-sans font-medium text-stone-700 text-sm bg-white/90 px-3 py-1.5 rounded-full shadow border border-stone-200 animate-bounce">
+              <span>👈 Click Aquí</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="relative w-full min-h-[500px] flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in duration-700 overflow-hidden">
+          <div className="absolute bottom-16 left-4 right-4 h-[2px] bg-stone-800 pointer-events-none opacity-80" />
+
+          <div className={`z-20 w-full md:w-1/2 flex flex-col justify-center px-4 sm:px-6 transition-all duration-1000 ${
+            stage === "shift-and-text" || stage === "completed" ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8 pointer-events-none"
+          }`}>
+            <div className="whitespace-pre-line text-sm sm:text-base font-serif font-medium text-stone-900 leading-relaxed tracking-wide min-h-[220px]">
+              {typedText}
+              {!isTypingDone && <span className="inline-block w-2 h-4 bg-amber-600 ml-1 animate-pulse" />}
+            </div>
+
+            {stage === "completed" && (
+              <div className="mt-8 pt-4 border-t border-stone-300 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                <p className="text-xs sm:text-sm italic text-stone-600 font-serif">
+                  &ldquo;{footerText}&rdquo;
+                </p>
+                <div className="mt-4 flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="inline-flex items-center gap-1.5 text-xs text-amber-700 hover:text-amber-900 font-sans font-semibold underline cursor-pointer"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Volver a reproducir animación
+                  </button>
+                </div>
+              </div>
             )}
           </div>
+
+          <div className={`relative z-10 w-full md:w-1/2 flex items-center justify-center transition-all duration-1000 ${
+            stage === "shift-and-text" || stage === "completed" ? "md:translate-x-4" : "mx-auto"
+          }`}>
+            <div className="relative w-[340px] h-[360px] sm:w-[400px] sm:h-[390px]">
+              <svg viewBox="0 0 400 380" className="w-full h-full overflow-visible">
+                <g className={`transition-opacity duration-700 ${stage !== "initial" ? "opacity-100" : "opacity-0"}`}>
+                  <path
+                    d="M 193 350 L 195 240 L 205 240 L 207 350 Z"
+                    fill="#155e42"
+                    className={`transition-all duration-700 ease-out origin-bottom ${
+                      stage === "growing-trunk" || stage === "growing-branches" || stage === "flowers" || stage === "shift-and-text" || stage === "completed"
+                        ? "scale-y-100"
+                        : "scale-y-0"
+                    }`}
+                  />
+                  
+                  {branches.map((b, bi) => (
+                    <line
+                      key={bi}
+                      x1={b.x1}
+                      y1={b.y1}
+                      x2={b.x2}
+                      y2={b.y2}
+                      stroke="#155e42"
+                      strokeWidth={b.width}
+                      strokeLinecap="round"
+                      className="transition-all duration-700 ease-out"
+                      style={{
+                        transitionDelay: `${b.delay}ms`,
+                        opacity: stage !== "initial" && stage !== "growing-trunk" ? 1 : 0,
+                      }}
+                    />
+                  ))}
+                </g>
+
+                <g className={`transition-all duration-700 ${
+                  stage === "flowers" || stage === "shift-and-text" || stage === "completed" ? "opacity-100" : "opacity-0 pointer-events-none"
+                }`}>
+                  {flowers.map((f) => (
+                    <g
+                      key={f.id}
+                      transform={`translate(${f.x}, ${f.y})`}
+                      className="transition-transform duration-500 ease-out hover:scale-125"
+                      style={{
+                        transitionDelay: `${f.delay}ms`,
+                      }}
+                    >
+                      <circle r={f.size / 2} fill="#fbbf24" stroke="#f59e0b" strokeWidth="1" />
+                      {Array.from({ length: 8 }).map((_, pi) => {
+                        const angle = (360 / 8) * pi;
+                        return (
+                          <ellipse
+                            key={pi}
+                            cx="0"
+                            cy={-f.size / 2.2}
+                            rx={f.size / 6}
+                            ry={f.size / 3.2}
+                            fill="#fde047"
+                            transform={`rotate(${angle})`}
+                          />
+                        );
+                      })}
+                      <circle r={f.size / 4.2} fill="#3b1d06" stroke="#231003" strokeWidth="0.5" />
+                    </g>
+                  ))}
+                </g>
+
+                {(stage === "shift-and-text" || stage === "completed") && (
+                  <g className="animate-in fade-in duration-1000">
+                    {fallingPetals.map((p) => (
+                      <g key={p.id} transform={`translate(${p.x}, ${p.y})`} className="animate-bounce" style={{ animationDuration: '3s' }}>
+                        <circle r="4.5" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.5" />
+                        <circle r="1.8" fill="#3b1d06" />
+                      </g>
+                    ))}
+                  </g>
+                )}
+              </svg>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="w-full text-center z-10 max-w-md min-h-[110px] flex flex-col items-center justify-center">
-        {phase === "intro" && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <p className="text-sm sm:text-base text-amber-100/90 italic mb-3">
-              "Los girasoles siempre buscan la luz más cálida y brillante... justo como cuando te veo sonreír."
-            </p>
-            <button
-              type="button"
-              onClick={handleStartBlooming}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-stone-950 font-bold text-sm shadow-[0_0_20px_rgba(245,158,11,0.4)] transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <Play className="w-4 h-4 fill-current" />
-              Hacer Florecer el Girasol
-            </button>
-          </div>
-        )}
-        {phase === "blooming" && (
-          <div className="animate-in fade-in duration-300 flex flex-col items-center">
-            <div className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
-              <Sparkles className="w-4 h-4 animate-spin" />
-              Floreciendo en la galaxia...
-            </div>
-            <div className="w-48 h-2 bg-black/40 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
-              <div
-                className="h-full bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full transition-all duration-100"
-                style={{ width: `${(bloomedPetals / totalPetals) * 100}%` }}
-              />
-            </div>
-          </div>
-        )}
-        {phase === "poem" && (
-          <div className="animate-in fade-in zoom-in-95 duration-500 w-full bg-amber-950/30 border border-amber-500/30 rounded-2xl p-4 backdrop-blur-md shadow-lg">
-            <p className="text-sm sm:text-base text-amber-100 leading-relaxed font-sans italic">
-              🌻 <strong className="text-amber-300 font-semibold">Para ti:</strong> Que en cada etapa y en cada momento de la vida, nunca te falte una razón para iluminar el mundo con tu alegría y tu esencia única.
-            </p>
-            <div className="mt-3 pt-2 border-t border-amber-500/20 flex items-center justify-between">
-              <span className="text-xs text-amber-300/80 font-medium flex items-center gap-1.5">
-                <Heart className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                Con todo mi cariño ✨
-              </span>
-              <button
-                type="button"
-                onClick={handleReset}
-                className="text-xs text-amber-400 hover:text-amber-200 underline flex items-center gap-1 cursor-pointer"
-              >
-                <RotateCcw className="w-3 h-3" />
-                Volver a florecer
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

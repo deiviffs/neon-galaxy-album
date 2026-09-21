@@ -118,13 +118,9 @@
     radial-gradient(1.2px 1.2px at 60% 92%, oklch(0.92 0.14 330 / 0.8), transparent),
     radial-gradient(1.4px 1.4px at 33% 50%, oklch(1 0 0 / 0.6), transparent);
   background-size: 420px 420px;
-  /* Estrellas estáticas sin repintado GPU */
 }
 
-
-}
-
-/* Animaciones de flotación desactivadas para máximo rendimiento móvil (120fps ultra-smooth) */
+/* Animaciones de flotación desactivadas para máximo rendimiento móvil */
 .float-card-1, .float-card-2, .float-card-3 {
   transform: none !important;
   animation: none !important;

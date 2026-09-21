@@ -110,8 +110,9 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
     }, 2400);
   };
 
+  // Efecto máquina de escribir que se ejecuta EXACTAMENTE UNA VEZ cuando stage === "shift-and-text"
   useEffect(() => {
-    if (stage === "shift-and-text" || stage === "completed") {
+    if (stage === "shift-and-text") {
       let currentIdx = 0;
       setTypedPoem("");
       setIsPoemDone(false);
@@ -122,7 +123,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
           currentIdx++;
         } else {
           setIsPoemDone(true);
-          setStage("completed");
+          setStage("completed"); // Cambia a completed y NUNCA más se repite
           clearInterval(interval);
         }
       }, 38);
@@ -153,17 +154,15 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
         </button>
       )}
 
-      {/* Pantalla 1: Girasol individual inicial SVG idéntico y centrado */}
+      {/* Pantalla 1: Girasol individual inicial SVG */}
       {!clickedInitial ? (
         <div className="flex flex-col items-center justify-center py-16 animate-in fade-in duration-500">
           <div
             onClick={handleStart}
             className="group relative flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
           >
-            {/* SVG Girasol idéntico al del video */}
             <svg width="220" height="220" viewBox="0 0 200 200" className="overflow-visible">
               <g transform="translate(100, 100)">
-                {/* Pétalos radiales */}
                 {Array.from({ length: 24 }).map((_, i) => {
                   const angle = (360 / 24) * i;
                   return (
@@ -180,13 +179,11 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
                     </g>
                   );
                 })}
-                {/* Centro marrón oscuro único */}
                 <circle r="36" fill="#301503" stroke="#4a2205" strokeWidth="2" />
                 <circle r="22" fill="#200d02" opacity="0.6" />
               </g>
             </svg>
 
-            {/* Texto de ayuda "Click Aquí" */}
             <div className="absolute top-1/2 -right-24 -translate-y-1/2 flex items-center gap-2 font-sans font-medium text-stone-700 text-sm bg-white/90 px-3 py-1.5 rounded-full shadow border border-stone-200 animate-bounce">
               <span>👈 Click Aquí</span>
             </div>
@@ -208,19 +205,20 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
               {!isPoemDone && <span className="inline-block w-2 h-4 bg-amber-600 ml-1 animate-pulse" />}
             </div>
 
+            {/* Frase final y botón "Volver a reproducir animación" con ALTO CONTRASTE y VISIBILIDAD */}
             {stage === "completed" && (
-              <div className="mt-6 pt-3 border-t border-stone-300 animate-in fade-in slide-in-from-bottom-2 duration-700">
-                <p className="text-xs sm:text-sm italic text-stone-600 font-serif">
+              <div className="mt-6 pt-3 border-t border-stone-400 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                <p className="text-xs sm:text-sm italic font-serif font-bold text-stone-800">
                   &ldquo;{footerText}&rdquo;
                 </p>
-                <div className="mt-3 flex items-center gap-4">
+                <div className="mt-4 flex items-center">
                   <button
                     type="button"
                     onClick={handleReset}
-                    className="inline-flex items-center gap-1.5 text-xs text-amber-700 hover:text-amber-900 font-sans font-semibold underline cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-600 active:scale-95 text-stone-950 font-sans font-bold text-xs shadow-md transition-all cursor-pointer"
                   >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    Volver a reproducir animación
+                    <RotateCcw className="w-3.5 h-3.5 text-stone-950" />
+                    <span>Volver a reproducir animación</span>
                   </button>
                 </div>
               </div>

@@ -507,14 +507,14 @@ export const DEFAULT_PLATES: Plate[] = [
     isVideo: false,
     rotation: 0,
     melody: "aurora",
-    audioUrl: "/music/JVKE_-_golden_hour.mp3",
-    audioName: "JVKE - Golden Hour",
+    audioUrl: "/music/3AM-Tu_Me_Encantas.mp3",
+    audioName: "Tú Me Encantas - 3AM",
     audioBlob: null,
     order: 30,
   },
 ];
 
-const DB_NAME = "album-galaxia-v46";
+const DB_NAME = "album-galaxia-v47";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {

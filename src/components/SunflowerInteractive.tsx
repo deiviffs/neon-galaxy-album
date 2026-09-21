@@ -38,7 +38,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
   const stageTimeout1Ref = useRef<NodeJS.Timeout | null>(null);
   const stageTimeout2Ref = useRef<NodeJS.Timeout | null>(null);
 
-  const poemText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
+  const poemText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n✨ 21 de Septiembre ✨\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
   const footerText = "Eres el sol que hace florecer cada uno de mis días.";
 
   useEffect(() => {

@@ -458,9 +458,14 @@ function Index() {
                       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-amber-500/25 rounded-full blur-2xl group-hover/sunflower:scale-125 transition-transform duration-700 pointer-events-none" />
 
                       {/* Tag / Badge */}
-                      <div className="z-10 self-start flex items-center gap-1.5 rounded-full border border-amber-400/50 bg-amber-950/80 px-3 py-1 text-[0.7rem] font-bold text-amber-300 backdrop-blur-md shadow-md">
-                        <Sun className="h-3 w-3 text-amber-300 animate-spin" style={{ animationDuration: '10s' }} />
-                        {plate.tag}
+                      <div className="z-10 w-full flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 rounded-full border border-amber-400/50 bg-amber-950/80 px-3 py-1 text-[0.7rem] font-bold text-amber-300 backdrop-blur-md shadow-md">
+                          <Sun className="h-3 w-3 text-amber-300 animate-spin" style={{ animationDuration: '10s' }} />
+                          {plate.tag}
+                        </div>
+                        <span className="text-[0.68rem] font-sans font-semibold text-amber-300/80 bg-black/40 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                          21 de Septiembre
+                        </span>
                       </div>
 
                       {/* Girasol central animado en la tarjeta */}

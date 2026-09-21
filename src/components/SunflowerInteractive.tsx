@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { X, RotateCcw, Volume2, VolumeX, Music } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, RotateCcw } from "lucide-react";
 
 interface SunflowerInteractiveProps {
   onClose?: () => void;
-  audioUrl?: string | null;
 }
 
 interface TreeBranch {
@@ -23,29 +22,7 @@ interface TreeFlower {
   batch: number;
 }
 
-interface LyricLine {
-  time: number;
-  text: string;
-}
-
-// Letra EXACTA y oficial de "Tú Me Encantas" - 3AM
-const LYRICS: LyricLine[] = [
-  { time: 0.0, text: "🎶 (Intro - Tú Me Encantas • 3AM) 🌻" },
-  { time: 6.2, text: "Tú me encantas, no lo puedo negar" },
-  { time: 9.8, text: "Tu carita me tiene flotando en otro lugar" },
-  { time: 13.5, text: "No hay nadie como tú, baby, qué bendición" },
-  { time: 17.0, text: "Cada segundo a tu lado me llena el corazón" },
-  { time: 20.8, text: "Y es que me vuelves loco cuando me miras así" },
-  { time: 24.5, text: "No existe nada más lindo que hacerte sonreír" },
-  { time: 28.5, text: "Tú me encantas... de la cabeza a los pies" },
-  { time: 32.2, text: "Y si volviera a nacer, te elegiría otra vez" },
-  { time: 36.0, text: "Porque tú tienes esa magia que nadie más tiene" },
-  { time: 40.0, text: "Eres mi luz, mi paz, lo más bonito que me sostiene ✨" },
-  { time: 44.5, text: "🌻 ¡Feliz Día de las Flores Amarillas! 💛" },
-  { time: 48.0, text: "Eres el sol que hace florecer cada uno de mis días." },
-];
-
-export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Encantas.mp3" }: SunflowerInteractiveProps) {
+export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
   const [clickedInitial, setClickedInitial] = useState(false);
   const [stage, setStage] = useState<"initial" | "growing-tree" | "blooming-flowers" | "shift-and-text" | "completed">("initial");
   const [visibleBatches, setVisibleBatches] = useState<number>(0);
@@ -53,10 +30,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
   const [isPoemDone, setIsPoemDone] = useState(false);
   const [flowers, setFlowers] = useState<TreeFlower[]>([]);
   const [branches, setBranches] = useState<TreeBranch[]>([]);
-  const [currentLyricIndex, setCurrentLyricIndex] = useState<number>(0);
-  const [isAudioMuted, setIsAudioMuted] = useState(false);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const poemText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
   const footerText = "Eres el sol que hace florecer cada uno de mis días.";
@@ -116,39 +89,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
     setFlowers(flowerList);
   }, []);
 
-  // Audio sincronizado (Solo UNA instancia controlada)
-  useEffect(() => {
-    if (!clickedInitial) return;
-
-    if (!audioRef.current) {
-      audioRef.current = new Audio(audioUrl ?? "/music/3AM-Tu_Me_Encantas.mp3");
-    }
-
-    const audio = audioRef.current;
-    audio.currentTime = 0;
-    audio.volume = 0.85;
-    audio.play().catch((err) => console.warn("Audio play blocked", err));
-
-    const onTimeUpdate = () => {
-      const curr = audio.currentTime;
-      let activeIdx = 0;
-      for (let i = 0; i < LYRICS.length; i++) {
-        if (curr >= LYRICS[i].time) {
-          activeIdx = i;
-        }
-      }
-      setCurrentLyricIndex(activeIdx);
-    };
-
-    audio.addEventListener("timeupdate", onTimeUpdate);
-
-    return () => {
-      audio.removeEventListener("timeupdate", onTimeUpdate);
-      audio.pause();
-      audioRef.current = null;
-    };
-  }, [clickedInitial, audioUrl]);
-
   const handleStart = () => {
     if (clickedInitial) return;
     setClickedInitial(true);
@@ -192,22 +132,11 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
   }, [stage]);
 
   const handleReset = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {});
-    }
     setClickedInitial(false);
     setStage("initial");
     setVisibleBatches(0);
     setTypedPoem("");
     setIsPoemDone(false);
-  };
-
-  const toggleMute = () => {
-    if (audioRef.current) {
-      audioRef.current.muted = !isAudioMuted;
-      setIsAudioMuted(!isAudioMuted);
-    }
   };
 
   return (
@@ -216,10 +145,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
       {onClose && (
         <button
           type="button"
-          onClick={() => {
-            if (audioRef.current) audioRef.current.pause();
-            onClose();
-          }}
+          onClick={onClose}
           className="absolute top-4 right-4 z-50 p-2.5 rounded-full bg-stone-200/80 border border-stone-300 text-stone-700 hover:text-stone-950 hover:bg-stone-300 transition-all cursor-pointer shadow-sm"
           title="Cerrar"
         >
@@ -227,57 +153,38 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
         </button>
       )}
 
-      {/* Control de sonido */}
-      {clickedInitial && (
-        <button
-          type="button"
-          onClick={toggleMute}
-          className="absolute top-4 left-4 z-50 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-stone-200/90 border border-stone-300 text-xs font-sans font-semibold text-stone-800 shadow hover:bg-stone-300 transition-all cursor-pointer"
-        >
-          {isAudioMuted ? (
-            <>
-              <VolumeX className="w-4 h-4 text-rose-600" />
-              <span>Sin Sonido</span>
-            </>
-          ) : (
-            <>
-              <Volume2 className="w-4 h-4 text-emerald-700 animate-bounce" />
-              <span className="truncate max-w-[140px]">Tú Me Encantas • 3AM</span>
-            </>
-          )}
-        </button>
-      )}
-
-      {/* Pantalla 1: Girasol individual inicial PERFECTAMENTE CENTRADO */}
+      {/* Pantalla 1: Girasol individual inicial SVG idéntico y centrado */}
       {!clickedInitial ? (
         <div className="flex flex-col items-center justify-center py-16 animate-in fade-in duration-500">
           <div
             onClick={handleStart}
             className="group relative flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
           >
-            {/* Flor concéntrica */}
-            <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
-              {/* Pétalos radiales */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                {Array.from({ length: 24 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-6 sm:w-7 h-22 sm:h-26 origin-bottom -translate-x-1/2 -translate-y-full"
-                    style={{
-                      left: "50%",
-                      top: "50%",
-                      transform: `rotate(${i * 15}deg)`,
-                    }}
-                  >
-                    <div className="w-full h-full rounded-t-full bg-gradient-to-t from-[#f59e0b] via-[#fbbf24] to-[#fde68a] border-t border-amber-200 shadow-sm" />
-                  </div>
-                ))}
-              </div>
-              {/* Centro de semillas */}
-              <div className="relative z-20 w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-[#381e09] border-4 border-[#59300e] shadow-inner flex items-center justify-center">
-                <div className="w-14 h-14 rounded-full border border-dashed border-amber-600/40" />
-              </div>
-            </div>
+            {/* SVG Girasol idéntico al del video */}
+            <svg width="220" height="220" viewBox="0 0 200 200" className="overflow-visible">
+              <g transform="translate(100, 100)">
+                {/* Pétalos radiales */}
+                {Array.from({ length: 24 }).map((_, i) => {
+                  const angle = (360 / 24) * i;
+                  return (
+                    <g key={i} transform={`rotate(${angle})`}>
+                      <ellipse
+                        cx="0"
+                        cy="-62"
+                        rx="12"
+                        ry="30"
+                        fill="#fbbf24"
+                        stroke="#f59e0b"
+                        strokeWidth="0.8"
+                      />
+                    </g>
+                  );
+                })}
+                {/* Centro marrón oscuro único */}
+                <circle r="36" fill="#301503" stroke="#4a2205" strokeWidth="2" />
+                <circle r="22" fill="#200d02" opacity="0.6" />
+              </g>
+            </svg>
 
             {/* Texto de ayuda "Click Aquí" */}
             <div className="absolute top-1/2 -right-24 -translate-y-1/2 flex items-center gap-2 font-sans font-medium text-stone-700 text-sm bg-white/90 px-3 py-1.5 rounded-full shadow border border-stone-200 animate-bounce">
@@ -286,7 +193,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
           </div>
         </div>
       ) : (
-        /* Pantalla 2: Escenario con Árbol alto, Poema y Letra Sincronizada */
+        /* Pantalla 2: Escenario limpio con Árbol y Poema */
         <div className="relative w-full min-h-[520px] flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in duration-700 overflow-hidden pb-12">
           
           {/* Línea horizontal del suelo */}
@@ -320,7 +227,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
             )}
           </div>
 
-          {/* Lado Derecho: Árbol + Letra sincronizada debajo */}
+          {/* Lado Derecho: Árbol alto de Girasoles en Corazón */}
           <div className={`relative z-10 w-full md:w-1/2 flex flex-col items-center justify-center transition-all duration-1000 ${
             stage === "shift-and-text" || stage === "completed" ? "md:translate-x-4" : "mx-auto"
           }`}>
@@ -390,16 +297,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
                   })}
                 </g>
               </svg>
-            </div>
-
-            {/* Letra de la canción sincronizada debajo del árbol */}
-            <div className="z-30 mt-1 min-h-[44px] flex items-center justify-center px-4 py-1.5 rounded-2xl bg-amber-500/10 border border-amber-600/30 text-stone-900 shadow-sm backdrop-blur-sm transition-all">
-              <div className="flex items-center gap-2 text-xs sm:text-sm font-sans font-medium text-amber-950">
-                <Music className="w-3.5 h-3.5 text-amber-700 shrink-0 animate-bounce" />
-                <span key={currentLyricIndex} className="animate-in fade-in zoom-in-95 duration-300">
-                  {LYRICS[currentLyricIndex]?.text ?? "🎶 ..."}
-                </span>
-              </div>
             </div>
           </div>
         </div>

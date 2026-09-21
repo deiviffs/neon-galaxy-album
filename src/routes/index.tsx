@@ -465,22 +465,21 @@ function Index() {
 
                       {/* Girasol central animado en la tarjeta */}
                       <div className="relative z-10 my-auto flex flex-col items-center group-hover/sunflower:scale-110 transition-transform duration-500">
-                        <div className="relative w-32 h-32 flex items-center justify-center">
-                          {/* Pétalos exteriores dorados */}
-                          {Array.from({ length: 16 }).map((_, pi) => (
-                            <div
-                              key={pi}
-                              className="absolute top-1/2 left-1/2 w-4 h-14 origin-bottom -translate-x-1/2 -translate-y-full"
-                              style={{ transform: `translate(-50%, -100%) rotate(${pi * 22.5}deg)` }}
-                            >
-                              <div className="w-full h-full rounded-t-full bg-gradient-to-t from-amber-500 via-yellow-400 to-amber-200 border-t border-amber-100 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
-                            </div>
-                          ))}
-                          {/* Centro */}
-                          <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-br from-[#451a03] via-[#78350f] to-[#271003] border-2 border-amber-400/80 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),0_0_15px_rgba(245,158,11,0.5)] flex items-center justify-center">
-                            <Sparkles className="w-6 h-6 text-yellow-300 " />
-                          </div>
-                        </div>
+                        {/* Girasol SVG perfecto sin desfasaje */}
+                        <svg width="130" height="130" viewBox="0 0 120 120" className="overflow-visible drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                          <g transform="translate(60, 60)">
+                            {Array.from({ length: 18 }).map((_, pi) => {
+                              const angle = (360 / 18) * pi;
+                              return (
+                                <g key={pi} transform={`rotate(${angle})`}>
+                                  <ellipse cx="0" cy="-36" rx="7" ry="18" fill="#fbbf24" stroke="#f59e0b" strokeWidth="0.5" />
+                                </g>
+                              );
+                            })}
+                            <circle r="20" fill="#301503" stroke="#eab308" strokeWidth="1.5" />
+                            <circle r="12" fill="#200d02" opacity="0.6" />
+                          </g>
+                        </svg>
 
                         <span className="mt-4 text-xs font-bold uppercase tracking-wider text-amber-300 bg-amber-500/20 px-3 py-1 rounded-full border border-amber-400/30">
                           🌻 Toca para abrir

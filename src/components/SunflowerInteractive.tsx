@@ -20,7 +20,7 @@ interface TreeFlower {
   x: number;
   y: number;
   size: number;
-  batch: number; // Oleadas de 5 en 5 / 10 en 10
+  batch: number;
 }
 
 interface LyricLine {
@@ -28,21 +28,21 @@ interface LyricLine {
   text: string;
 }
 
-// Letra sincronizada segundo a segundo de "Tú Me Encantas - 3AM"
+// Letra EXACTA y oficial de "Tú Me Encantas" - 3AM
 const LYRICS: LyricLine[] = [
-  { time: 0, text: "🎶 (Intro - Tú Me Encantas • 3AM) 🌻" },
-  { time: 7.5, text: "Tú me encantas, no lo puedo negar" },
-  { time: 11.0, text: "Tu carita me tiene flotando en otro lugar" },
-  { time: 15.0, text: "No hay nadie como tú, baby, qué bendición" },
-  { time: 18.5, text: "Cada segundo a tu lado me llena el corazón" },
-  { time: 22.5, text: "Y es que me vuelves loco cuando me miras así" },
-  { time: 26.5, text: "No existe nada más lindo que hacerte sonreír" },
-  { time: 30.5, text: "Tú me encantas... de la cabeza a los pies" },
-  { time: 34.5, text: "Y si volviera a nacer, te elegiría otra vez" },
-  { time: 38.5, text: "Porque tú tienes esa magia que nadie más tiene" },
-  { time: 42.5, text: "Eres mi luz, mi paz, lo más bonito que me sostiene ✨" },
-  { time: 47.0, text: "🌻 ¡Feliz Día de las Flores Amarillas! 💛" },
-  { time: 52.0, text: "Eres el sol que hace florecer cada uno de mis días." },
+  { time: 0.0, text: "🎶 (Intro - Tú Me Encantas • 3AM) 🌻" },
+  { time: 6.2, text: "Tú me encantas, no lo puedo negar" },
+  { time: 9.8, text: "Tu carita me tiene flotando en otro lugar" },
+  { time: 13.5, text: "No hay nadie como tú, baby, qué bendición" },
+  { time: 17.0, text: "Cada segundo a tu lado me llena el corazón" },
+  { time: 20.8, text: "Y es que me vuelves loco cuando me miras así" },
+  { time: 24.5, text: "No existe nada más lindo que hacerte sonreír" },
+  { time: 28.5, text: "Tú me encantas... de la cabeza a los pies" },
+  { time: 32.2, text: "Y si volviera a nacer, te elegiría otra vez" },
+  { time: 36.0, text: "Porque tú tienes esa magia que nadie más tiene" },
+  { time: 40.0, text: "Eres mi luz, mi paz, lo más bonito que me sostiene ✨" },
+  { time: 44.5, text: "🌻 ¡Feliz Día de las Flores Amarillas! 💛" },
+  { time: 48.0, text: "Eres el sol que hace florecer cada uno de mis días." },
 ];
 
 export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Encantas.mp3" }: SunflowerInteractiveProps) {
@@ -61,33 +61,27 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
   const poemText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
   const footerText = "Eres el sol que hace florecer cada uno de mis días.";
 
-  // Generar la estructura del árbol alto y las flores agrupadas en 14 oleadas suaves
   useEffect(() => {
-    // 1. Árbol más alto y elegante con ramas orgánicas
+    // 1. Árbol alto con ramas orgánicas
     const branchList: TreeBranch[] = [
-      // Tronco alto
       { x1: 200, y1: 370, x2: 200, y2: 220, width: 15, delay: 0 },
-      // Ramas principales
       { x1: 200, y1: 260, x2: 140, y2: 170, width: 10, delay: 800 },
       { x1: 200, y1: 250, x2: 260, y2: 165, width: 10, delay: 950 },
       { x1: 200, y1: 210, x2: 195, y2: 120, width: 8, delay: 1100 },
-      // Ramas secundarias
       { x1: 140, y1: 170, x2: 95, y2: 120, width: 6, delay: 1500 },
       { x1: 140, y1: 170, x2: 165, y2: 110, width: 5.5, delay: 1650 },
       { x1: 260, y1: 165, x2: 305, y2: 115, width: 6, delay: 1750 },
       { x1: 260, y1: 165, x2: 235, y2: 105, width: 5.5, delay: 1850 },
-      // Puntas de ramas
       { x1: 95, y1: 120, x2: 65, y2: 85, width: 4, delay: 2200 },
       { x1: 305, y1: 115, x2: 335, y2: 80, width: 4, delay: 2350 },
     ];
     setBranches(branchList);
 
-    // 2. Coordenadas matemáticas de corazón para distribuir los girasoles
+    // 2. Coordenadas de corazón
     const flowerList: TreeFlower[] = [];
     let id = 0;
     const totalPoints = 110;
 
-    // Borde exterior del corazón
     for (let i = 0; i < totalPoints; i++) {
       const t = (Math.PI * 2 * i) / totalPoints;
       const hx = 16 * Math.pow(Math.sin(t), 3);
@@ -97,12 +91,11 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
       const x = 200 + hx * scale + (Math.random() * 8 - 4);
       const y = 130 + hy * scale + (Math.random() * 8 - 4);
       const size = 16 + Math.random() * 8;
-      const batch = Math.floor((i / totalPoints) * 10); // Lotes 0..9
+      const batch = Math.floor((i / totalPoints) * 10);
 
       flowerList.push({ id: id++, x, y, size, batch });
     }
 
-    // Capas interiores del corazón
     for (let layer = 0.25; layer <= 0.85; layer += 0.2) {
       const innerCount = Math.floor(totalPoints * layer * 0.75);
       for (let j = 0; j < innerCount; j++) {
@@ -114,7 +107,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
         const x = 200 + hx * scale + (Math.random() * 10 - 5);
         const y = 130 + hy * scale + (Math.random() * 10 - 5);
         const size = 15 + Math.random() * 9;
-        const batch = 4 + Math.floor(Math.random() * 8); // Lotes 4..11
+        const batch = 4 + Math.floor(Math.random() * 8);
 
         flowerList.push({ id: id++, x, y, size, batch });
       }
@@ -123,7 +116,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
     setFlowers(flowerList);
   }, []);
 
-  // Control de audio y sincronización de letra en tiempo real
+  // Audio sincronizado (Solo UNA instancia controlada)
   useEffect(() => {
     if (!clickedInitial) return;
 
@@ -132,6 +125,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
     }
 
     const audio = audioRef.current;
+    audio.currentTime = 0;
     audio.volume = 0.85;
     audio.play().catch((err) => console.warn("Audio play blocked", err));
 
@@ -151,26 +145,23 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
     return () => {
       audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.pause();
+      audioRef.current = null;
     };
   }, [clickedInitial, audioUrl]);
 
-  // Manejar el inicio de la animación al hacer click en el girasol
   const handleStart = () => {
     if (clickedInitial) return;
     setClickedInitial(true);
     setStage("growing-tree");
 
-    // 1. Crecimiento del árbol
     setTimeout(() => {
       setStage("blooming-flowers");
-      // 2. Florecimiento progresivo en oleadas (de 5 a 10 girasoles por oleada cada 350ms)
       let currentBatch = 0;
       const batchInterval = setInterval(() => {
         currentBatch++;
         setVisibleBatches(currentBatch);
         if (currentBatch >= 12) {
           clearInterval(batchInterval);
-          // 3. Con el corazón ya formado, desplazar suavemente y mostrar texto
           setTimeout(() => {
             setStage("shift-and-text");
           }, 800);
@@ -179,7 +170,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
     }, 2400);
   };
 
-  // Efecto máquina de escribir del poema
   useEffect(() => {
     if (stage === "shift-and-text" || stage === "completed") {
       let currentIdx = 0;
@@ -237,7 +227,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
         </button>
       )}
 
-      {/* Botón silenciar / sonido */}
+      {/* Control de sonido */}
       {clickedInitial && (
         <button
           type="button"
@@ -258,41 +248,51 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
         </button>
       )}
 
-      {/* Pantalla 1: Girasol individual inicial */}
+      {/* Pantalla 1: Girasol individual inicial PERFECTAMENTE CENTRADO */}
       {!clickedInitial ? (
         <div className="flex flex-col items-center justify-center py-16 animate-in fade-in duration-500">
           <div
             onClick={handleStart}
             className="group relative flex flex-col items-center justify-center cursor-pointer transition-transform duration-300 hover:scale-105 active:scale-95"
           >
-            <div className="relative w-44 h-44 sm:w-52 sm:h-52 flex items-center justify-center">
-              {Array.from({ length: 24 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute top-1/2 left-1/2 w-5 sm:w-6 h-20 sm:h-24 origin-bottom -translate-x-1/2 -translate-y-full"
-                  style={{ transform: `translate(-50%, -100%) rotate(${i * 15}deg)` }}
-                >
-                  <div className="w-full h-full rounded-t-full bg-gradient-to-t from-[#f59e0b] via-[#fbbf24] to-[#fde68a] border-t border-amber-200 shadow-sm" />
-                </div>
-              ))}
-              <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#381e09] border-2 border-[#59300e] shadow-inner flex items-center justify-center">
+            {/* Flor concéntrica */}
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+              {/* Pétalos radiales */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                {Array.from({ length: 24 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute w-6 sm:w-7 h-22 sm:h-26 origin-bottom -translate-x-1/2 -translate-y-full"
+                    style={{
+                      left: "50%",
+                      top: "50%",
+                      transform: `rotate(${i * 15}deg)`,
+                    }}
+                  >
+                    <div className="w-full h-full rounded-t-full bg-gradient-to-t from-[#f59e0b] via-[#fbbf24] to-[#fde68a] border-t border-amber-200 shadow-sm" />
+                  </div>
+                ))}
+              </div>
+              {/* Centro de semillas */}
+              <div className="relative z-20 w-22 h-22 sm:w-26 sm:h-26 rounded-full bg-[#381e09] border-4 border-[#59300e] shadow-inner flex items-center justify-center">
                 <div className="w-14 h-14 rounded-full border border-dashed border-amber-600/40" />
               </div>
             </div>
 
+            {/* Texto de ayuda "Click Aquí" */}
             <div className="absolute top-1/2 -right-24 -translate-y-1/2 flex items-center gap-2 font-sans font-medium text-stone-700 text-sm bg-white/90 px-3 py-1.5 rounded-full shadow border border-stone-200 animate-bounce">
               <span>👈 Click Aquí</span>
             </div>
           </div>
         </div>
       ) : (
-        /* Pantalla 2: Escenario principal con Árbol alto, Poema y Letra Sincronizada */
+        /* Pantalla 2: Escenario con Árbol alto, Poema y Letra Sincronizada */
         <div className="relative w-full min-h-[520px] flex flex-col md:flex-row items-center justify-between gap-4 animate-in fade-in duration-700 overflow-hidden pb-12">
           
           {/* Línea horizontal del suelo */}
           <div className="absolute bottom-16 left-4 right-4 h-[2px] bg-stone-800 pointer-events-none opacity-80" />
 
-          {/* Lado Izquierdo: Poema mecanografiado */}
+          {/* Lado Izquierdo: Poema */}
           <div className={`z-20 w-full md:w-1/2 flex flex-col justify-center px-4 sm:px-6 transition-all duration-1000 ${
             stage === "shift-and-text" || stage === "completed" ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8 pointer-events-none"
           }`}>
@@ -301,7 +301,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
               {!isPoemDone && <span className="inline-block w-2 h-4 bg-amber-600 ml-1 animate-pulse" />}
             </div>
 
-            {/* Frase inferior en cursiva y botón reiniciar */}
             {stage === "completed" && (
               <div className="mt-6 pt-3 border-t border-stone-300 animate-in fade-in slide-in-from-bottom-2 duration-700">
                 <p className="text-xs sm:text-sm italic text-stone-600 font-serif">
@@ -321,16 +320,14 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
             )}
           </div>
 
-          {/* Lado Derecho: Árbol alto de Girasoles en Corazón + Letra Musical debajo */}
+          {/* Lado Derecho: Árbol + Letra sincronizada debajo */}
           <div className={`relative z-10 w-full md:w-1/2 flex flex-col items-center justify-center transition-all duration-1000 ${
             stage === "shift-and-text" || stage === "completed" ? "md:translate-x-4" : "mx-auto"
           }`}>
-            {/* Contenedor del Árbol */}
             <div className="relative w-[340px] h-[370px] sm:w-[390px] sm:h-[400px]">
               <svg viewBox="0 0 400 400" className="w-full h-full overflow-visible">
                 {/* Tronco y Ramas */}
                 <g className={`transition-opacity duration-700 ${stage !== "initial" ? "opacity-100" : "opacity-0"}`}>
-                  {/* Tronco alto */}
                   <path
                     d="M 192 370 L 195 220 L 205 220 L 208 370 Z"
                     fill="#155e42"
@@ -339,7 +336,6 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
                     }`}
                   />
                   
-                  {/* Ramas que se abren */}
                   {branches.map((b, bi) => (
                     <line
                       key={bi}
@@ -359,7 +355,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
                   ))}
                 </g>
 
-                {/* Girasoles en Corazón floreciendo progresivamente en oleadas */}
+                {/* Girasoles en Corazón floreciendo en oleadas */}
                 <g className={`transition-all duration-700 ${
                   stage !== "initial" && stage !== "growing-tree" ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}>
@@ -396,7 +392,7 @@ export function SunflowerInteractive({ onClose, audioUrl = "/music/3AM-Tu_Me_Enc
               </svg>
             </div>
 
-            {/* Letra de la canción sincronizada debajo del árbol (Discreta y fluida) */}
+            {/* Letra de la canción sincronizada debajo del árbol */}
             <div className="z-30 mt-1 min-h-[44px] flex items-center justify-center px-4 py-1.5 rounded-2xl bg-amber-500/10 border border-amber-600/30 text-stone-900 shadow-sm backdrop-blur-sm transition-all">
               <div className="flex items-center gap-2 text-xs sm:text-sm font-sans font-medium text-amber-950">
                 <Music className="w-3.5 h-3.5 text-amber-700 shrink-0 animate-bounce" />

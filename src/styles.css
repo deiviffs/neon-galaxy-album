@@ -118,13 +118,10 @@
     radial-gradient(1.2px 1.2px at 60% 92%, oklch(0.92 0.14 330 / 0.8), transparent),
     radial-gradient(1.4px 1.4px at 33% 50%, oklch(1 0 0 / 0.6), transparent);
   background-size: 420px 420px;
-  animation: drift 90s linear infinite;
+  /* Estrellas estáticas sin repintado GPU */
 }
 
-@keyframes drift {
-  to {
-    background-position: 420px 420px;
-  }
+
 }
 
 /* Animaciones de flotación desactivadas para máximo rendimiento móvil (120fps ultra-smooth) */

@@ -312,7 +312,7 @@ function Index() {
 
           <div className="relative z-10 w-full max-w-md rounded-3xl border border-border/80 bg-popover/90 p-8 sm:p-10 shadow-2xl backdrop-blur-2xl neon-ring text-center animate-in zoom-in-95 duration-300">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-primary/20 text-accent neon-ring shadow-lg mb-6">
-              <Sparkles className="h-8 w-8 animate-pulse text-accent" />
+              <Sparkles className="h-8 w-8  text-accent" />
             </div>
 
             <h1 className="font-serif text-3xl font-bold tracking-wide text-foreground sm:text-4xl drop-shadow-md">
@@ -371,7 +371,7 @@ function Index() {
       <header className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-popover/80 backdrop-blur-md neon-ring">
-            <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+            <Sparkles className="h-5 w-5 text-primary " />
           </div>
           <div>
             <h1 className="font-display text-lg font-bold text-neon sm:text-xl">Galaxia de Recuerdos</h1>
@@ -387,7 +387,7 @@ function Index() {
             aria-label={muted ? "Activar música" : "Silenciar música"}
             className="shrink-0 rounded-full border border-border bg-popover/70 p-2.5 text-foreground backdrop-blur-xl transition-all hover:neon-ring hover:scale-105 active:scale-95 cursor-pointer sm:p-3"
           >
-            {muted ? <VolumeX className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5" /> : <Volume2 className="h-4 w-4 text-accent animate-pulse sm:h-5 sm:w-5" />}
+            {muted ? <VolumeX className="h-4 w-4 text-muted-foreground sm:h-5 sm:w-5" /> : <Volume2 className="h-4 w-4 text-accent  sm:h-5 sm:w-5" />}
           </button>
         </div>
       </header>
@@ -478,7 +478,7 @@ function Index() {
                           ))}
                           {/* Centro */}
                           <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-br from-[#451a03] via-[#78350f] to-[#271003] border-2 border-amber-400/80 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),0_0_15px_rgba(245,158,11,0.5)] flex items-center justify-center">
-                            <Sparkles className="w-6 h-6 text-yellow-300 animate-pulse" />
+                            <Sparkles className="w-6 h-6 text-yellow-300 " />
                           </div>
                         </div>
 
@@ -546,7 +546,7 @@ function Index() {
 
                     {/* Tag / Badge flotante */}
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full border border-border/60 bg-popover/80 px-3 py-1 text-[0.7rem] font-semibold text-accent backdrop-blur-md shadow-md">
-                      {isVid ? <Film className="h-3 w-3 text-primary animate-pulse" /> : <Sparkles className="h-3 w-3 text-primary" />}
+                      {isVid ? <Film className="h-3 w-3 text-primary " /> : <Sparkles className="h-3 w-3 text-primary" />}
                       {plate.tag}
                     </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { X, RotateCcw } from "lucide-react";
 
 interface SunflowerInteractiveProps {
@@ -35,22 +35,22 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
   const footerText = "Eres el sol que hace florecer cada uno de mis días.";
 
   useEffect(() => {
-    // 1. Tronco y ramas
+    // 1. Tronco y ramas con tiempos más pausados y fluidos
     const branchList: TreeBranch[] = [
       { x1: 200, y1: 340, x2: 200, y2: 230, width: 14, delay: 0 },
-      { x1: 200, y1: 250, x2: 150, y2: 180, width: 9, delay: 400 },
-      { x1: 200, y1: 240, x2: 250, y2: 175, width: 9, delay: 450 },
-      { x1: 150, y1: 180, x2: 110, y2: 130, width: 6, delay: 800 },
-      { x1: 150, y1: 180, x2: 170, y2: 120, width: 5, delay: 850 },
-      { x1: 250, y1: 175, x2: 290, y2: 125, width: 6, delay: 900 },
-      { x1: 250, y1: 175, x2: 230, y2: 115, width: 5, delay: 950 },
-      { x1: 200, y1: 210, x2: 195, y2: 135, width: 6, delay: 700 },
-      { x1: 110, y1: 130, x2: 80, y2: 95, width: 4, delay: 1200 },
-      { x1: 290, y1: 125, x2: 320, y2: 90, width: 4, delay: 1250 },
+      { x1: 200, y1: 250, x2: 150, y2: 180, width: 9, delay: 700 },
+      { x1: 200, y1: 240, x2: 250, y2: 175, width: 9, delay: 850 },
+      { x1: 150, y1: 180, x2: 110, y2: 130, width: 6, delay: 1400 },
+      { x1: 150, y1: 180, x2: 170, y2: 120, width: 5, delay: 1550 },
+      { x1: 250, y1: 175, x2: 290, y2: 125, width: 6, delay: 1700 },
+      { x1: 250, y1: 175, x2: 230, y2: 115, width: 5, delay: 1850 },
+      { x1: 200, y1: 210, x2: 195, y2: 135, width: 6, delay: 1200 },
+      { x1: 110, y1: 130, x2: 80, y2: 95, width: 4, delay: 2200 },
+      { x1: 290, y1: 125, x2: 320, y2: 90, width: 4, delay: 2350 },
     ];
     setBranches(branchList);
 
-    // 2. Coordenadas matemáticas de corazón para distribuir los girasoles
+    // 2. Coordenadas matemáticas de corazón para distribuir los girasoles progresivamente
     const flowerList: TreeFlower[] = [];
     let id = 0;
     
@@ -64,7 +64,8 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
       const x = 200 + hx * scale + (Math.random() * 8 - 4);
       const y = 135 + hy * scale + (Math.random() * 8 - 4);
       const size = 16 + Math.random() * 8;
-      const delay = (i / totalPoints) * 1200 + Math.random() * 300;
+      // Florecimiento progresivo y gradual (distribuido a lo largo de 3 segundos)
+      const delay = (i / totalPoints) * 2800 + Math.random() * 500;
 
       flowerList.push({ id: id++, x, y, size, delay });
     }
@@ -81,7 +82,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
         const x = 200 + hx * scale + (Math.random() * 10 - 5);
         const y = 135 + hy * scale + (Math.random() * 10 - 5);
         const size = 15 + Math.random() * 9;
-        const delay = 600 + Math.random() * 1000;
+        const delay = 1000 + Math.random() * 2200;
 
         flowerList.push({ id: id++, x, y, size, delay });
       }
@@ -93,7 +94,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
       id: pi,
       x: 140 - pi * 18 + Math.random() * 10,
       y: 190 + pi * 24 + Math.random() * 10,
-      delay: 2000 + pi * 400,
+      delay: 3800 + pi * 500,
     }));
     setFallingPetals(petals);
   }, []);
@@ -102,18 +103,22 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
     if (clickedInitial) return;
     setClickedInitial(true);
     
+    // Secuencia con ritmo natural y fluido:
+    // 1. Crecimiento del tronco principal
     setStage("growing-trunk");
     setTimeout(() => {
       setStage("growing-branches");
-    }, 600);
+    }, 1000);
 
+    // 2. Comienzan a brotar y florecer los girasoles progresivamente
     setTimeout(() => {
       setStage("flowers");
-    }, 1400);
+    }, 2200);
 
+    // 3. Con el corazón formado, se desplaza a la derecha y comienza la escritura del poema
     setTimeout(() => {
       setStage("shift-and-text");
-    }, 3000);
+    }, 5600);
   };
 
   useEffect(() => {
@@ -131,7 +136,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
           setStage("completed");
           clearInterval(interval);
         }
-      }, 38);
+      }, 42);
 
       return () => clearInterval(interval);
     }
@@ -223,7 +228,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
                   <path
                     d="M 193 350 L 195 240 L 205 240 L 207 350 Z"
                     fill="#155e42"
-                    className={`transition-all duration-700 ease-out origin-bottom ${
+                    className={`transition-all duration-1000 ease-out origin-bottom ${
                       stage === "growing-trunk" || stage === "growing-branches" || stage === "flowers" || stage === "shift-and-text" || stage === "completed"
                         ? "scale-y-100"
                         : "scale-y-0"
@@ -240,7 +245,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
                       stroke="#155e42"
                       strokeWidth={b.width}
                       strokeLinecap="round"
-                      className="transition-all duration-700 ease-out"
+                      className="transition-all duration-1000 ease-out"
                       style={{
                         transitionDelay: `${b.delay}ms`,
                         opacity: stage !== "initial" && stage !== "growing-trunk" ? 1 : 0,
@@ -256,7 +261,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
                     <g
                       key={f.id}
                       transform={`translate(${f.x}, ${f.y})`}
-                      className="transition-transform duration-500 ease-out hover:scale-125"
+                      className="transition-all duration-700 ease-out hover:scale-125"
                       style={{
                         transitionDelay: `${f.delay}ms`,
                       }}

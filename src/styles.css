@@ -127,43 +127,10 @@
   }
 }
 
-@keyframes float-gentle-1 {
-  0%, 100% {
-    transform: translate3d(0, 0px, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(0, -20px, 0) rotate(1deg);
-  }
-}
-
-@keyframes float-gentle-2 {
-  0%, 100% {
-    transform: translate3d(0, 0px, 0) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(0, 18px, 0) rotate(-1deg);
-  }
-}
-
-@keyframes float-gentle-3 {
-  0%, 100% {
-    transform: translate3d(0, -10px, 0) rotate(0.8deg);
-  }
-  50% {
-    transform: translate3d(0, 14px, 0) rotate(-0.8deg);
-  }
-}
-
-.float-card-1 {
-  animation: float-gentle-1 5.5s ease-in-out infinite;
-}
-
-.float-card-2 {
-  animation: float-gentle-2 6.2s ease-in-out infinite;
-}
-
-.float-card-3 {
-  animation: float-gentle-3 5.8s ease-in-out infinite;
+/* Animaciones de flotación desactivadas para máximo rendimiento móvil (120fps ultra-smooth) */
+.float-card-1, .float-card-2, .float-card-3 {
+  transform: none !important;
+  animation: none !important;
 }
 
 @keyframes sound-bar {

@@ -427,7 +427,7 @@ function Index() {
           style={{ willChange: "scroll-position" }}
         >
           {looped.map((plate, i) => {
-            const floatClass = i % 3 === 0 ? "float-card-1" : i % 3 === 1 ? "float-card-2" : "float-card-3";
+            const floatClass = "";
             const initialOffset = i % 2 === 0 ? "1.5rem" : "-1.5rem";
             const mediaSrc = plateImageSrc(plate, urlCache.current);
             const isVid = isMediaVideo(plate, mediaSrc);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { X, RotateCcw } from "lucide-react";
 
 interface SunflowerInteractiveProps {
@@ -30,6 +30,13 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
   const [isPoemDone, setIsPoemDone] = useState(false);
   const [flowers, setFlowers] = useState<TreeFlower[]>([]);
   const [branches, setBranches] = useState<TreeBranch[]>([]);
+
+  // Refs de seguridad para que los timers NUNCA se ejecuten dos veces
+  const timerStartedRef = useRef(false);
+  const typeIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const batchIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const stageTimeout1Ref = useRef<NodeJS.Timeout | null>(null);
+  const stageTimeout2Ref = useRef<NodeJS.Timeout | null>(null);
 
   const poemText = `🌻 FELIZ DÍA DE LAS FLORES AMARILLAS 🌻\n\nCADA GIRASOL QUE VES AQUÍ ES UN LATIDO DE MI CORAZÓN.\nASÍ COMO EL SOL ILUMINA LOS CAMPOS, TÚ ILUMINAS MI VIDA.\nQUE ESTAS FLORES TE RECUERDEN LO ESPECIAL QUE ERES PARA MÍ.\n\n- ¡TE AMO! 💛`;
   const footerText = "Eres el sol que hace florecer cada uno de mis días.";
@@ -87,52 +94,67 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
     }
 
     setFlowers(flowerList);
+
+    return () => {
+      // Limpiar al desmontar
+      if (typeIntervalRef.current) clearInterval(typeIntervalRef.current);
+      if (batchIntervalRef.current) clearInterval(batchIntervalRef.current);
+      if (stageTimeout1Ref.current) clearTimeout(stageTimeout1Ref.current);
+      if (stageTimeout2Ref.current) clearTimeout(stageTimeout2Ref.current);
+    };
   }, []);
 
   const handleStart = () => {
-    if (clickedInitial) return;
+    if (clickedInitial || timerStartedRef.current) return;
+    timerStartedRef.current = true;
     setClickedInitial(true);
     setStage("growing-tree");
 
-    setTimeout(() => {
+    stageTimeout1Ref.current = setTimeout(() => {
       setStage("blooming-flowers");
       let currentBatch = 0;
-      const batchInterval = setInterval(() => {
+      batchIntervalRef.current = setInterval(() => {
         currentBatch++;
         setVisibleBatches(currentBatch);
         if (currentBatch >= 12) {
-          clearInterval(batchInterval);
-          setTimeout(() => {
+          if (batchIntervalRef.current) clearInterval(batchIntervalRef.current);
+          stageTimeout2Ref.current = setTimeout(() => {
             setStage("shift-and-text");
+            // INICIAR ESCRITURA DIRECTA SIN DEPENDER DE RE-RENDERS
+            startTyping();
           }, 800);
         }
       }, 350);
     }, 2400);
   };
 
-  // Efecto máquina de escribir que se ejecuta EXACTAMENTE UNA VEZ cuando stage === "shift-and-text"
-  useEffect(() => {
-    if (stage === "shift-and-text") {
-      let currentIdx = 0;
-      setTypedPoem("");
-      setIsPoemDone(false);
+  const startTyping = () => {
+    if (typeIntervalRef.current) clearInterval(typeIntervalRef.current);
+    let currentIdx = 0;
+    setTypedPoem("");
+    setIsPoemDone(false);
 
-      const interval = setInterval(() => {
-        if (currentIdx < poemText.length) {
-          setTypedPoem(poemText.slice(0, currentIdx + 1));
-          currentIdx++;
-        } else {
-          setIsPoemDone(true);
-          setStage("completed"); // Cambia a completed y NUNCA más se repite
-          clearInterval(interval);
-        }
-      }, 38);
-
-      return () => clearInterval(interval);
-    }
-  }, [stage]);
+    typeIntervalRef.current = setInterval(() => {
+      currentIdx++;
+      if (currentIdx <= poemText.length) {
+        setTypedPoem(poemText.slice(0, currentIdx));
+      } else {
+        if (typeIntervalRef.current) clearInterval(typeIntervalRef.current);
+        typeIntervalRef.current = null;
+        setIsPoemDone(true);
+        setStage("completed"); // Estado final definitivo. NADA lo volverá a reiniciar
+      }
+    }, 40);
+  };
 
   const handleReset = () => {
+    // Limpiar todos los intervalos y timers activos
+    if (typeIntervalRef.current) clearInterval(typeIntervalRef.current);
+    if (batchIntervalRef.current) clearInterval(batchIntervalRef.current);
+    if (stageTimeout1Ref.current) clearTimeout(stageTimeout1Ref.current);
+    if (stageTimeout2Ref.current) clearTimeout(stageTimeout2Ref.current);
+
+    timerStartedRef.current = false;
     setClickedInitial(false);
     setStage("initial");
     setVisibleBatches(0);
@@ -205,7 +227,7 @@ export function SunflowerInteractive({ onClose }: SunflowerInteractiveProps) {
               {!isPoemDone && <span className="inline-block w-2 h-4 bg-amber-600 ml-1 animate-pulse" />}
             </div>
 
-            {/* Frase final y botón "Volver a reproducir animación" con ALTO CONTRASTE y VISIBILIDAD */}
+            {/* Frase final y botón "Volver a reproducir animación" */}
             {stage === "completed" && (
               <div className="mt-6 pt-3 border-t border-stone-400 animate-in fade-in slide-in-from-bottom-2 duration-700">
                 <p className="text-xs sm:text-sm italic font-serif font-bold text-stone-800">

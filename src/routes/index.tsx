@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Film, Music, Pencil, Play, Plus, RotateCcw, Sparkles, Sun, Volume2, VolumeX, X } from "lucide-react";
 import { PlateEditor } from "@/components/PlateEditor";
+import { SunflowerInteractive } from "@/components/SunflowerInteractive";
 import { deletePlate, isMediaVideo, loadPlates, plateImageSrc, resetToDefaultPlates, savePlate, DEFAULT_PLATES, type Plate } from "@/lib/album";
 import { getMelody } from "@/lib/melodies";
 import { musicEngine } from "@/lib/musicEngine";
@@ -442,6 +443,63 @@ function Index() {
                 className={`group relative w-[72vw] max-w-[22rem] shrink-0 overflow-hidden rounded-3xl border border-border/80 bg-[#16102a]/95 shadow-xl transition-transform duration-300 hover:scale-105 ${floatClass}`} style={{ willChange: "transform", contain: "layout paint" }}
               >
                 {/* Botón para abrir recuerdo y reproducir música */}
+                {/* Diseño especial de Girasol Cósmico para la casilla #31 */}
+                {plate.id === "p31" ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenId(plate.id);
+                      playFor(plate);
+                    }}
+                    className="block w-full text-left cursor-pointer relative overflow-hidden bg-gradient-to-b from-[#241305]/95 via-[#1a0f26]/95 to-[#0b0817]/95 border-2 border-amber-400/60 rounded-3xl shadow-[0_0_30px_rgba(245,158,11,0.35)] hover:shadow-[0_0_45px_rgba(245,158,11,0.6)] transition-all group/sunflower"
+                  >
+                    <div className="relative h-[24rem] sm:h-[28rem] flex flex-col items-center justify-between p-6 overflow-hidden">
+                      {/* Resplandor ámbar */}
+                      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-48 h-48 bg-amber-500/25 rounded-full blur-2xl group-hover/sunflower:scale-125 transition-transform duration-700 pointer-events-none" />
+
+                      {/* Tag / Badge */}
+                      <div className="z-10 self-start flex items-center gap-1.5 rounded-full border border-amber-400/50 bg-amber-950/80 px-3 py-1 text-[0.7rem] font-bold text-amber-300 backdrop-blur-md shadow-md">
+                        <Sun className="h-3 w-3 text-amber-300 animate-spin" style={{ animationDuration: '10s' }} />
+                        {plate.tag}
+                      </div>
+
+                      {/* Girasol central animado en la tarjeta */}
+                      <div className="relative z-10 my-auto flex flex-col items-center group-hover/sunflower:scale-110 transition-transform duration-500">
+                        <div className="relative w-32 h-32 flex items-center justify-center">
+                          {/* Pétalos exteriores dorados */}
+                          {Array.from({ length: 16 }).map((_, pi) => (
+                            <div
+                              key={pi}
+                              className="absolute top-1/2 left-1/2 w-4 h-14 origin-bottom -translate-x-1/2 -translate-y-full"
+                              style={{ transform: `translate(-50%, -100%) rotate(${pi * 22.5}deg)` }}
+                            >
+                              <div className="w-full h-full rounded-t-full bg-gradient-to-t from-amber-500 via-yellow-400 to-amber-200 border-t border-amber-100 shadow-[0_0_8px_rgba(245,158,11,0.6)]" />
+                            </div>
+                          ))}
+                          {/* Centro */}
+                          <div className="relative z-10 w-16 h-16 rounded-full bg-gradient-to-br from-[#451a03] via-[#78350f] to-[#271003] border-2 border-amber-400/80 shadow-[inset_0_0_10px_rgba(0,0,0,0.8),0_0_15px_rgba(245,158,11,0.5)] flex items-center justify-center">
+                            <Sparkles className="w-6 h-6 text-yellow-300 animate-pulse" />
+                          </div>
+                        </div>
+
+                        <span className="mt-4 text-xs font-bold uppercase tracking-wider text-amber-300 bg-amber-500/20 px-3 py-1 rounded-full border border-amber-400/30">
+                          🌻 Toca para abrir
+                        </span>
+                      </div>
+
+                      {/* Contenido inferior */}
+                      <div className="z-10 w-full text-center">
+                        <h2 className="font-display text-lg font-bold text-amber-200 drop-shadow group-hover/sunflower:text-amber-100 transition-colors">
+                          {plate.title}
+                        </h2>
+                        <div className="mt-2 flex items-center justify-center gap-2 text-xs text-amber-300">
+                          <Music className="h-3.5 w-3.5 animate-bounce" />
+                          <span className="truncate font-semibold">{plate.audioName}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                ) : (
                 <button
                   type="button"
                   onClick={() => {
@@ -507,7 +565,7 @@ function Index() {
                     </div>
                   </div>
                 </button>
-
+                )}
                 
               </div>
             );
@@ -530,6 +588,12 @@ function Index() {
           role="dialog"
           aria-modal="true"
         >
+          {open.id === "p31" ? (
+            <div onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl">
+              <SunflowerInteractive onClose={close} />
+            </div>
+          ) : (
+          <>
           {/* Botón cerrar */}
           <button
             type="button"
@@ -633,6 +697,8 @@ function Index() {
               
             </figcaption>
           </figure>
+          </>
+          )}
         </div>
       )}
 

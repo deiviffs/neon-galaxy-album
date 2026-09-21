@@ -496,9 +496,25 @@ export const DEFAULT_PLATES: Plate[] = [
     audioBlob: null,
     order: 29,
   }
+,
+  {
+    id: "p31",
+    title: "Un Girasol Que Brilla Para Ti",
+    tag: "31 • Flor Cósmica",
+    message: "Los girasoles siempre buscan la luz más cálida y brillante... justo como cuando te veo sonreír. Toca para hacer florecer este girasol especial 🌻✨",
+    imageUrl: "/sunflower-icon.png",
+    imageBlob: null,
+    isVideo: false,
+    rotation: 0,
+    melody: "aurora",
+    audioUrl: "/music/JVKE_-_golden_hour.mp3",
+    audioName: "JVKE - Golden Hour",
+    audioBlob: null,
+    order: 30,
+  },
 ];
 
-const DB_NAME = "album-galaxia-v45";
+const DB_NAME = "album-galaxia-v46";
 const STORE = "plates";
 
 function openDb(): Promise<IDBDatabase> {
